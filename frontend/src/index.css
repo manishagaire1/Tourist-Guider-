@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette — ocean/travel primary, warm sunset accent */
+  --color-primary-50: #eff9fb;
+  --color-primary-100: #d7f0f4;
+  --color-primary-200: #b3e1e9;
+  --color-primary-300: #80cbd9;
+  --color-primary-400: #45a9bd;
+  --color-primary-500: #2a8ba3;
+  --color-primary-600: #1f6f89;
+  --color-primary-700: #1c5a70;
+  --color-primary-800: #1c495c;
+  --color-primary-900: #1a3e4e;
+  --color-primary-950: #0c2530;
+
+  --color-accent-50: #fff6ed;
+  --color-accent-100: #ffe9d3;
+  --color-accent-200: #ffcea5;
+  --color-accent-300: #ffab6d;
+  --color-accent-400: #ff8133;
+  --color-accent-500: #fd5f0c;
+  --color-accent-600: #ee4402;
+  --color-accent-700: #c53105;
+  --color-accent-800: #9c280c;
+  --color-accent-900: #7e230d;
+
+  --color-neutral-50: #f8f9fa;
+  --color-neutral-100: #f1f2f4;
+  --color-neutral-200: #e3e5e9;
+  --color-neutral-300: #cbced5;
+  --color-neutral-400: #9ba0ac;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4d5561;
+  --color-neutral-700: #384049;
+  --color-neutral-800: #232830;
+  --color-neutral-900: #14171c;
+  --color-neutral-950: #0a0c0f;
+
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgba(10, 12, 15, 0.04), 0 8px 24px rgba(10, 12, 15, 0.06);
+  --shadow-card-hover: 0 4px 8px rgba(10, 12, 15, 0.06), 0 16px 36px rgba(10, 12, 15, 0.1);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--color-neutral-800);
+    background: var(--color-neutral-50);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+  }
+}
