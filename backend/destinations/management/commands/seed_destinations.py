@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand
-from django.utils.text import slugify
 
 from destinations.models import Destination
 from places.models import Category, Place
@@ -18,6 +17,177 @@ CATEGORIES = [
     ('Adventure', 'mountain'),
     ('Nightlife', 'martini'),
 ]
+
+# Every image below was individually verified against Wikipedia/Wikimedia
+# Commons — the article/file was opened, its description checked, and (for
+# ambiguous cases) the photo itself was viewed to confirm it actually shows
+# the named place, not a lookalike, a different attraction in the same city,
+# or a generic city shot reused for a specific landmark. See image_credit
+# for the photographer/license; image_source_url is the page it was verified
+# against.
+IMAGE_SOURCE = 'Wikimedia Commons'
+
+DESTINATION_IMAGES = {
+    'Tokyo': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Skyscrapers_of_Shinjuku_2009_January.jpg/500px-Skyscrapers_of_Shinjuku_2009_January.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Tokyo',
+        'image_credit': 'Morio — CC BY-SA 3.0',
+    },
+    'Kyoto': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Kyoto%2C_Japan_%2849667780482%29.jpg/500px-Kyoto%2C_Japan_%2849667780482%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Kyoto',
+        'image_credit': 'Nina R from Africa — CC BY 2.0',
+    },
+    'Osaka': {
+        # Deliberately NOT the Osaka Castle photo (used below for the Osaka
+        # Castle place card) — a generic skyline shot avoids the two cards
+        # showing an identical image.
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Skyline_view_of_Osaka.jpg/500px-Skyline_view_of_Osaka.jpg',
+        'image_source_url': 'https://commons.wikimedia.org/wiki/File:Skyline_view_of_Osaka.jpg',
+        'image_credit': 'Ian G Shingler — CC BY-SA 4.0',
+    },
+    'Fukuoka': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Fukuoka_Skyline_of_Seaside_Momochi.jpg/500px-Fukuoka_Skyline_of_Seaside_Momochi.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Fukuoka',
+        'image_credit': 'Nryate — CC BY-SA 4.0',
+    },
+    'Paris': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/500px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Paris',
+        'image_credit': 'Yann Caradec from Paris, France — CC BY-SA 2.0',
+    },
+    'London': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/London_Skyline_%28125508655%29.jpeg/500px-London_Skyline_%28125508655%29.jpeg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/London',
+        'image_credit': 'Ilya Grigorik — CC BY-SA 3.0',
+    },
+    'New York': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/500px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/New_York_City',
+        'image_credit': 'Dllu — CC BY-SA 4.0',
+    },
+    'Dubai': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Dubai_Skyline_2016.jpg/500px-Dubai_Skyline_2016.jpg',
+        'image_source_url': 'https://commons.wikimedia.org/wiki/File:Dubai_Skyline_2016.jpg',
+        'image_credit': 'Tonenight — CC BY-SA 4.0',
+    },
+    'Kathmandu': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Kathmandu-Durbar_Square-06-Mahavishnu-Kuh-Vishnu-Pratapamalla-Jagannath-2007-gje.jpg/500px-Kathmandu-Durbar_Square-06-Mahavishnu-Kuh-Vishnu-Pratapamalla-Jagannath-2007-gje.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Kathmandu',
+        'image_credit': 'Gerd Eichmann — CC BY-SA 4.0',
+    },
+    'Sydney': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/500px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Sydney',
+        'image_credit': 'Benh LIEU SONG (Flickr) — CC BY-SA 4.0',
+    },
+}
+
+PLACE_IMAGES = {
+    'Senso-ji Temple': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Sensoji_2023.jpg/500px-Sensoji_2023.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Sens%C5%8D-ji',
+        'image_credit': 'Akonnchiroll — CC0',
+    },
+    'Tokyo Skytree': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Tokyo_Skytree_2014_%E2%85%A2.jpg/500px-Tokyo_Skytree_2014_%E2%85%A2.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Tokyo_Skytree',
+        'image_credit': 'Kakidai — CC BY-SA 3.0',
+    },
+    'Fushimi Inari Shrine': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg/500px-Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Fushimi_Inari-taisha',
+        'image_credit': 'Basile Morin — CC BY-SA 4.0',
+    },
+    'Arashiyama Bamboo Grove': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Arashiyama_Bamboo_Grove.jpg/500px-Arashiyama_Bamboo_Grove.jpg',
+        'image_source_url': 'https://commons.wikimedia.org/wiki/File:Arashiyama_Bamboo_Grove.jpg',
+        'image_credit': 'Mitchwandrew — CC BY 4.0',
+    },
+    'Osaka Castle': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Osaka_Castle_03bs3200.jpg/500px-Osaka_Castle_03bs3200.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Osaka_Castle',
+        'image_credit': '663highland — CC BY 2.5',
+    },
+    'Dotonbori': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Dotonbori%2C_Osaka%2C_at_night%2C_November_2016.jpg/500px-Dotonbori%2C_Osaka%2C_at_night%2C_November_2016.jpg',
+        'image_source_url': 'https://commons.wikimedia.org/wiki/File:Dotonbori,_Osaka,_at_night,_November_2016.jpg',
+        'image_credit': 'Martin Falbisoner — CC BY-SA 4.0',
+    },
+    'Ohori Park': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/%E5%A4%A7%E6%BF%A0%E5%85%AC%E5%9C%92_%283360365578%29.jpg/500px-%E5%A4%A7%E6%BF%A0%E5%85%AC%E5%9C%92_%283360365578%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/%C5%8Chori_Park',
+        'image_credit': 'Tzuhsun Hsu from Taipei, Taiwan — CC BY-SA 2.0',
+    },
+    'Yatai Food Stalls': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Yatai_beside_Naka-gawa%2C_Fukuoka%2C_Japan_-_20110525-01.jpg/500px-Yatai_beside_Naka-gawa%2C_Fukuoka%2C_Japan_-_20110525-01.jpg',
+        'image_source_url': 'https://commons.wikimedia.org/wiki/File:Yatai_beside_Naka-gawa,_Fukuoka,_Japan_-_20110525-01.jpg',
+        'image_credit': 'Jacklee — CC BY-SA 3.0',
+    },
+    'Eiffel Tower': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/500px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Eiffel_Tower',
+        'image_credit': 'Benh LIEU SONG — Public domain',
+    },
+    'Louvre Museum': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Louvre_Museum_Wikimedia_Commons.jpg/500px-Louvre_Museum_Wikimedia_Commons.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Louvre',
+        'image_credit': 'Benh LIEU SONG (Flickr) — CC BY-SA 3.0',
+    },
+    'British Museum': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/British_Museum_%28aerial%29.jpg/500px-British_Museum_%28aerial%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/British_Museum',
+        'image_credit': 'Luke Massey & the Greater London National Park City Initiative — CC BY 2.0',
+    },
+    'Tower Bridge': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Tower_Bridge_at_Dawn.jpg/500px-Tower_Bridge_at_Dawn.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Tower_Bridge',
+        'image_credit': 'Fuzzypiggy — CC BY-SA 3.0',
+    },
+    'Central Park': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Global_Citizen_Festival_Central_Park_New_York_City_from_NYonAir_%2815351915006%29.jpg/500px-Global_Citizen_Festival_Central_Park_New_York_City_from_NYonAir_%2815351915006%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Central_Park',
+        'image_credit': 'Anthony Quintano from Hillsborough, NJ, United States — CC BY 2.0',
+    },
+    'Times Square': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/New_york_times_square-terabass.jpg/500px-New_york_times_square-terabass.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Times_Square',
+        'image_credit': 'Terabass — CC BY-SA 3.0',
+    },
+    'Burj Khalifa': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg/500px-Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Burj_Khalifa',
+        'image_credit': 'imran shahabuddin — CC BY 2.0',
+    },
+    'Dubai Mall': {
+        # The article's default image was a non-free/fair-use file not
+        # available on Commons — used the mall's signature waterfall
+        # installation instead, verified by viewing the photo directly.
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Dubai_MALL_Waterfalls.jpg/500px-Dubai_MALL_Waterfalls.jpg',
+        'image_source_url': 'https://commons.wikimedia.org/wiki/File:Dubai_MALL_Waterfalls.jpg',
+        'image_credit': 'Dakstor — CC BY-SA 4.0',
+    },
+    'Swayambhunath Stupa': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Swayambhunath_2018.jpg/500px-Swayambhunath_2018.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Swayambhunath',
+        'image_credit': 'Nabin K. Sapkota — CC BY-SA 4.0',
+    },
+    'Thamel Market': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Thamel_at_night_-_Kathmandu%2C_Nepal_-_panoramio_%281%29.jpg/500px-Thamel_at_night_-_Kathmandu%2C_Nepal_-_panoramio_%281%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Thamel',
+        'image_credit': 'Sergey Ashmarin — CC BY-SA 3.0',
+    },
+    'Sydney Opera House': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/500px-Sydney_Australia._%2821339175489%29.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Sydney_Opera_House',
+        'image_credit': 'Bernard Spragg. NZ from Christchurch, New Zealand — CC0',
+    },
+    'Bondi Beach': {
+        'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Bondi_from_above.jpg/500px-Bondi_from_above.jpg',
+        'image_source_url': 'https://en.wikipedia.org/wiki/Bondi_Beach',
+        'image_credit': 'Nick Ang — CC BY-SA 4.0',
+    },
+}
 
 DESTINATIONS = [
     {
@@ -123,12 +293,8 @@ DESTINATIONS = [
 ]
 
 
-def picsum(seed: str, width: int = 800, height: int = 600) -> str:
-    return f'https://picsum.photos/seed/{slugify(seed)}/{width}/{height}'
-
-
 class Command(BaseCommand):
-    help = 'Seed the database with demo destinations, categories, and places.'
+    help = 'Seed the database with demo destinations, categories, and places, using verified, individually-checked Wikimedia Commons photographs.'
 
     def handle(self, *args, **options):
         categories = {}
@@ -140,6 +306,7 @@ class Command(BaseCommand):
         destination_count = 0
         place_count = 0
         for entry in DESTINATIONS:
+            image = DESTINATION_IMAGES[entry['name']]
             destination, _ = Destination.objects.update_or_create(
                 name=entry['name'], country=entry['country'],
                 defaults={
@@ -148,13 +315,17 @@ class Command(BaseCommand):
                     'best_time_to_visit': entry['best_time_to_visit'],
                     'latitude': entry['latitude'],
                     'longitude': entry['longitude'],
-                    'image_url': picsum(f"{entry['name']}-{entry['country']}"),
+                    'image_url': image['image_url'],
+                    'image_source': IMAGE_SOURCE,
+                    'image_source_url': image['image_source_url'],
+                    'image_credit': image['image_credit'],
                     'interest_tags': entry['interests'],
                 },
             )
             destination_count += 1
 
             for place_name, category_name, rating, price_range, description, lat, lng in entry['places']:
+                place_image = PLACE_IMAGES[place_name]
                 Place.objects.update_or_create(
                     name=place_name, destination=destination,
                     defaults={
@@ -163,7 +334,10 @@ class Command(BaseCommand):
                         'price_range': price_range,
                         'description': description,
                         'address': f'{entry["name"]}, {entry["country"]}',
-                        'image_url': picsum(place_name),
+                        'image_url': place_image['image_url'],
+                        'image_source': IMAGE_SOURCE,
+                        'image_source_url': place_image['image_source_url'],
+                        'image_credit': place_image['image_credit'],
                         'latitude': lat,
                         'longitude': lng,
                     },
@@ -171,5 +345,5 @@ class Command(BaseCommand):
                 place_count += 1
 
         self.stdout.write(self.style.SUCCESS(
-            f'Seeded {destination_count} destinations and {place_count} places.'
+            f'Seeded {destination_count} destinations and {place_count} places with verified images.'
         ))

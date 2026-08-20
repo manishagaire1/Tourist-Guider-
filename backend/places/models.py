@@ -42,6 +42,9 @@ class Place(models.Model):
     phone = models.CharField(max_length=30, blank=True)
     website = models.URLField(blank=True)
     image_url = models.URLField(blank=True)
+    image_source = models.CharField(max_length=100, blank=True, help_text='e.g. "Wikimedia Commons"')
+    image_source_url = models.URLField(blank=True, help_text='Page the image was verified/sourced from')
+    image_credit = models.CharField(max_length=255, blank=True, help_text='Photographer/author and license, e.g. "Jane Doe — CC BY-SA 4.0"')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -25,6 +25,9 @@ export interface Destination {
   slug: string
   description: string
   image_url: string
+  image_source: string
+  image_source_url: string
+  image_credit: string
   rating: string
   best_time_to_visit: string
   latitude: string | null
@@ -56,6 +59,9 @@ export interface Place {
   phone: string
   website: string
   image_url: string
+  image_source: string
+  image_source_url: string
+  image_credit: string
   average_rating: number | null
   review_count: number
   created_at: string
