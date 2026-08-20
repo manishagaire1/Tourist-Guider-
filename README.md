@@ -195,6 +195,10 @@ Frontend flows (registration, login/logout, search, filters, map, place details,
 
 **Database:** PostgreSQL in production (SQLite is dev-only). Point `DATABASE_URL` at a managed Postgres instance (Render/Railway both offer one).
 
+## Contributors
+
+- [Manisha Gaire](https://github.com/manishagaire1)
+
 ## Roadmap / Future Improvements
 
 - Real-time availability and booking integrations
