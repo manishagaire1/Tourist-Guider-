@@ -12,6 +12,10 @@ class Destination(models.Model):
     best_time_to_visit = models.CharField(max_length=100, blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    interest_tags = models.JSONField(
+        default=list, blank=True,
+        help_text='List of users.TravelPreference.Interest values this destination matches',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

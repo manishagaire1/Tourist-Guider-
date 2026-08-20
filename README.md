@@ -25,9 +25,10 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Reviews & ratings (write/edit/delete own review, one per user per place)
 - [x] Weather integration (mock-data-first service layer, real forecast UI, activity recommendations)
 - [x] Travel budget calculator (live breakdown by category, per-traveler/per-day estimates)
-- [ ] Travel tips
-- [ ] Personalized recommendations
-- [ ] Profile dashboard
+- [x] Travel tips (10 real editorial guides — safety, culture, etiquette, phrases, visas, and more)
+- [x] Personalized recommendations (destinations tagged by interest, matched against saved travel preferences)
+- [x] Profile dashboard (stats, upcoming trip, weather, recommendations, editable preferences and profile)
+- [x] All Destinations directory with search
 - [ ] Full responsive design pass
 - [ ] Testing
 - [ ] Deployment preparation

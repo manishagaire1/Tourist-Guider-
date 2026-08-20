@@ -1,5 +1,5 @@
 import apiClient, { clearTokens, getStoredTokens, storeTokens } from '@/services/apiClient'
-import type { LoginResponse, User } from '@/types'
+import type { LoginResponse, TravelPreference, User } from '@/types'
 
 export interface RegisterPayload {
   username: string
@@ -38,5 +38,15 @@ export async function fetchProfile(): Promise<User> {
 
 export async function updateProfile(payload: Partial<User>): Promise<User> {
   const { data } = await apiClient.patch<User>('/auth/profile/', payload)
+  return data
+}
+
+export async function fetchTravelPreferences(): Promise<TravelPreference> {
+  const { data } = await apiClient.get<TravelPreference>('/auth/profile/preferences/')
+  return data
+}
+
+export async function updateTravelPreferences(interests: string[]): Promise<TravelPreference> {
+  const { data } = await apiClient.patch<TravelPreference>('/auth/profile/preferences/', { interests })
   return data
 }

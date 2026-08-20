@@ -99,6 +99,11 @@ export interface ItineraryItem {
   notes: string
 }
 
+export interface TravelPreference {
+  interests: string[]
+  updated_at: string
+}
+
 export interface Trip {
   id: number
   name: string

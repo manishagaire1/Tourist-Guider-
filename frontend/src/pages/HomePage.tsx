@@ -4,6 +4,7 @@ import { Map as MapIcon, Search } from 'lucide-react'
 import DestinationCard from '@/components/DestinationCard'
 import DestinationCardSkeleton from '@/components/DestinationCardSkeleton'
 import { fetchDestinations } from '@/services/destinationsService'
+import { addRecentSearch } from '@/utils/recentSearches'
 import type { Destination } from '@/types'
 
 function HomePage() {
@@ -36,7 +37,9 @@ function HomePage() {
 
   function handleSearch(event: FormEvent) {
     event.preventDefault()
-    navigate(query.trim() ? `/explore?q=${encodeURIComponent(query.trim())}` : '/explore')
+    const trimmed = query.trim()
+    if (trimmed) addRecentSearch(trimmed)
+    navigate(trimmed ? `/explore?q=${encodeURIComponent(trimmed)}` : '/explore')
   }
 
   return (

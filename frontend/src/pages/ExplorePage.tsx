@@ -5,10 +5,12 @@ import PlaceCard from '@/components/PlaceCard'
 import PlaceCardSkeleton from '@/components/PlaceCardSkeleton'
 import { fetchDestinations } from '@/services/destinationsService'
 import { fetchCategories, fetchPlaces } from '@/services/placesService'
+import { addRecentSearch, getRecentSearches } from '@/utils/recentSearches'
 import type { Category, Destination, Place } from '@/types'
 
 const PRICE_RANGES = ['$', '$$', '$$$', '$$$$']
 const RATINGS = [4.5, 4, 3.5, 3]
+const POPULAR_SEARCHES = ['Tokyo', 'Temples', 'Museums', 'Beaches', 'Nightlife', 'Shopping']
 
 function ExplorePage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -17,6 +19,7 @@ function ExplorePage() {
   const [places, setPlaces] = useState<Place[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
 
   const query = searchParams.get('q') ?? ''
   const categoryId = searchParams.get('category') ?? ''
@@ -37,6 +40,7 @@ function ExplorePage() {
   useEffect(() => {
     fetchCategories().then(setCategories).catch(() => setCategories([]))
     fetchDestinations().then(setDestinations).catch(() => setDestinations([]))
+    setRecentSearches(getRecentSearches())
   }, [])
 
   useEffect(() => {
@@ -45,6 +49,10 @@ function ExplorePage() {
     setError(null)
 
     const timeout = setTimeout(() => {
+      if (query) {
+        addRecentSearch(query)
+        setRecentSearches(getRecentSearches())
+      }
       fetchPlaces({
         search: query || undefined,
         category: categoryId ? Number(categoryId) : undefined,
@@ -87,6 +95,21 @@ function ExplorePage() {
           className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
         />
       </div>
+
+      {!query && (
+        <div className="mb-6 flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-neutral-500">{recentSearches.length > 0 ? 'Recent searches:' : 'Popular searches:'}</span>
+          {(recentSearches.length > 0 ? recentSearches : POPULAR_SEARCHES).map((term) => (
+            <button
+              key={term}
+              onClick={() => updateParam('q', term)}
+              className="rounded-pill border border-neutral-200 bg-white px-3 py-1 text-neutral-600 hover:border-accent-500 hover:text-accent-600"
+            >
+              {term}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="mb-8 flex flex-wrap items-center gap-3 text-sm">
         <span className="flex items-center gap-1.5 text-neutral-500">

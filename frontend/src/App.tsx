@@ -7,14 +7,17 @@ import HomePage from '@/pages/HomePage'
 import DestinationDetailPage from '@/pages/DestinationDetailPage'
 import PlaceDetailPage from '@/pages/PlaceDetailPage'
 import ExplorePage from '@/pages/ExplorePage'
+import DestinationsPage from '@/pages/DestinationsPage'
 import MapPage from '@/pages/MapPage'
 import FavoritesPage from '@/pages/FavoritesPage'
 import TripsPage from '@/pages/TripsPage'
 import TripDetailPage from '@/pages/TripDetailPage'
 import BudgetCalculatorPage from '@/pages/BudgetCalculatorPage'
+import TravelTipsPage from '@/pages/TravelTipsPage'
+import TravelTipDetailPage from '@/pages/TravelTipDetailPage'
+import ProfileDashboardPage from '@/pages/ProfileDashboardPage'
 import LoginPage from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
-import ComingSoonPage from '@/pages/ComingSoonPage'
 
 function App() {
   return (
@@ -30,26 +33,11 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
 
               <Route path="/explore" element={<ExplorePage />} />
-              <Route
-                path="/destinations"
-                element={
-                  <ComingSoonPage
-                    title="All Destinations"
-                    description="A full, filterable destinations directory is coming soon."
-                  />
-                }
-              />
+              <Route path="/destinations" element={<DestinationsPage />} />
               <Route path="/map" element={<MapPage />} />
               <Route path="/budget-calculator" element={<BudgetCalculatorPage />} />
-              <Route
-                path="/travel-tips"
-                element={
-                  <ComingSoonPage
-                    title="Travel Tips"
-                    description="Safety, culture, packing, and etiquette guides are coming soon."
-                  />
-                }
-              />
+              <Route path="/travel-tips" element={<TravelTipsPage />} />
+              <Route path="/travel-tips/:slug" element={<TravelTipDetailPage />} />
 
               <Route
                 path="/trips"
@@ -79,10 +67,7 @@ function App() {
                 path="/profile"
                 element={
                   <ProtectedRoute>
-                    <ComingSoonPage
-                      title="Profile"
-                      description="Manage your profile and travel preferences — coming soon."
-                    />
+                    <ProfileDashboardPage />
                   </ProtectedRoute>
                 }
               />
