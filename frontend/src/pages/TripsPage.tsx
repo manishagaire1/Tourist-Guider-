@@ -1,26 +1,62 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { CalendarRange, MapPin, Plus, Trash2 } from 'lucide-react'
+import { CalendarRange, CloudOff, MapPin, Plus, Trash2 } from 'lucide-react'
 import { fetchDestinations } from '@/services/destinationsService'
+import { getAllOfflineTrips } from '@/services/offlineDb'
 import { createTrip, deleteTrip, fetchTrips } from '@/services/tripsService'
+import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 import type { Destination, Trip } from '@/types'
 
 function TripsPage() {
+  const { isOnline, isSyncing } = useOnlineStatus()
+  const wasSyncing = useRef(isSyncing)
   const [trips, setTrips] = useState<Trip[]>([])
   const [destinations, setDestinations] = useState<Destination[]>([])
+  const [offlineTripIds, setOfflineTripIds] = useState<Set<number>>(new Set())
   const [isLoading, setIsLoading] = useState(true)
+  const [isShowingOfflineData, setIsShowingOfflineData] = useState(false)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [form, setForm] = useState({ name: '', destination: '', start_date: '', end_date: '' })
   const [error, setError] = useState<string | null>(null)
 
+  async function loadTrips() {
+    getAllOfflineTrips().then((offline) => setOfflineTripIds(new Set(offline.map((trip) => trip.id))))
+
+    // Check connectivity explicitly — the service worker's own API cache can
+    // otherwise serve a previously-fetched list while offline and mask that
+    // it's a possibly-stale saved copy.
+    if (!navigator.onLine) {
+      const offline = await getAllOfflineTrips()
+      setTrips(offline)
+      setIsShowingOfflineData(true)
+      return
+    }
+
+    try {
+      const [tripsData, destinationsData] = await Promise.all([fetchTrips(), fetchDestinations()])
+      setTrips(tripsData)
+      setDestinations(destinationsData)
+      setIsShowingOfflineData(false)
+    } catch {
+      const offline = await getAllOfflineTrips()
+      setTrips(offline)
+      setIsShowingOfflineData(true)
+    }
+  }
+
   useEffect(() => {
-    Promise.all([fetchTrips(), fetchDestinations()])
-      .then(([tripsData, destinationsData]) => {
-        setTrips(tripsData)
-        setDestinations(destinationsData)
-      })
-      .finally(() => setIsLoading(false))
+    setIsLoading(true)
+    loadTrips().finally(() => setIsLoading(false))
   }, [])
+
+  // Refresh once background sync finishes so the list reflects synced state
+  // instead of lingering on the offline snapshot.
+  useEffect(() => {
+    if (wasSyncing.current && !isSyncing && isOnline) {
+      loadTrips()
+    }
+    wasSyncing.current = isSyncing
+  }, [isSyncing])
 
   async function handleCreate(event: FormEvent) {
     event.preventDefault()
@@ -41,6 +77,7 @@ function TripsPage() {
   }
 
   async function handleDelete(tripId: number) {
+    if (!isOnline) return
     await deleteTrip(tripId)
     setTrips((prev) => prev.filter((trip) => trip.id !== tripId))
   }
@@ -58,12 +95,21 @@ function TripsPage() {
         </div>
         <button
           onClick={() => setIsFormOpen((open) => !open)}
-          className="flex items-center gap-2 rounded-pill bg-accent-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-600"
+          disabled={!isOnline}
+          title={isOnline ? undefined : 'Creating a trip requires an internet connection'}
+          className="flex items-center gap-2 rounded-pill bg-accent-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Plus className="size-4" />
           New Trip
         </button>
       </div>
+
+      {isShowingOfflineData && (
+        <div className="mb-6 flex items-center gap-2 rounded-card border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-600">
+          <CloudOff className="size-4 shrink-0" />
+          You're offline — showing trips saved for offline access.
+        </div>
+      )}
 
       {isFormOpen && (
         <form onSubmit={handleCreate} className="mb-8 flex flex-col gap-4 rounded-card border border-neutral-200 bg-white p-6">
@@ -142,8 +188,10 @@ function TripsPage() {
                 </Link>
                 <button
                   onClick={() => handleDelete(trip.id)}
+                  disabled={!isOnline}
                   aria-label="Delete trip"
-                  className="text-neutral-400 hover:text-red-600"
+                  title={isOnline ? undefined : 'Deleting a trip requires an internet connection'}
+                  className="text-neutral-400 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Trash2 className="size-4" />
                 </button>
@@ -158,7 +206,15 @@ function TripsPage() {
                 <CalendarRange className="size-3.5" />
                 {trip.start_date} – {trip.end_date}
               </p>
-              <p className="text-xs text-neutral-400">{trip.itinerary_items.length} itinerary items</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-neutral-400">{trip.itinerary_items.length} itinerary items</p>
+                {offlineTripIds.has(trip.id) && (
+                  <span className="flex items-center gap-1 text-xs font-medium text-primary-600">
+                    <CloudOff className="size-3.5" />
+                    Available offline
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>

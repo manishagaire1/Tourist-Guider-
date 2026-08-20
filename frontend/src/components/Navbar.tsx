@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Compass, Menu, User, X } from 'lucide-react'
+import OnlineStatusPill from '@/components/OnlineStatusPill'
 import { useAuth } from '@/hooks/useAuth'
 
 const navLinks = [
@@ -49,6 +50,7 @@ function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <OnlineStatusPill />
           {user ? (
             <>
               <Link
@@ -111,6 +113,7 @@ function Navbar() {
             ))}
           </div>
           <div className="mt-4 flex flex-col gap-2 border-t border-neutral-200 pt-4">
+            <OnlineStatusPill className="self-start" />
             {user ? (
               <>
                 <Link

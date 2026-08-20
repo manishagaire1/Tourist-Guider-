@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from '@/context/AuthContext'
 import { FavoritesProvider } from '@/context/FavoritesContext'
+import { OnlineStatusProvider } from '@/context/OnlineStatusContext'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/layouts/MainLayout'
 
@@ -28,61 +29,63 @@ function PageFallback() {
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <FavoritesProvider>
-          <Suspense fallback={<PageFallback />}>
-            <Routes>
-              <Route element={<MainLayout />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/destinations/:id" element={<DestinationDetailPage />} />
-                <Route path="/places/:id" element={<PlaceDetailPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+      <OnlineStatusProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            <Suspense fallback={<PageFallback />}>
+              <Routes>
+                <Route element={<MainLayout />}>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/destinations/:id" element={<DestinationDetailPage />} />
+                  <Route path="/places/:id" element={<PlaceDetailPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
 
-                <Route path="/explore" element={<ExplorePage />} />
-                <Route path="/destinations" element={<DestinationsPage />} />
-                <Route path="/map" element={<MapPage />} />
-                <Route path="/budget-calculator" element={<BudgetCalculatorPage />} />
-                <Route path="/travel-tips" element={<TravelTipsPage />} />
-                <Route path="/travel-tips/:slug" element={<TravelTipDetailPage />} />
+                  <Route path="/explore" element={<ExplorePage />} />
+                  <Route path="/destinations" element={<DestinationsPage />} />
+                  <Route path="/map" element={<MapPage />} />
+                  <Route path="/budget-calculator" element={<BudgetCalculatorPage />} />
+                  <Route path="/travel-tips" element={<TravelTipsPage />} />
+                  <Route path="/travel-tips/:slug" element={<TravelTipDetailPage />} />
 
-                <Route
-                  path="/trips"
-                  element={
-                    <ProtectedRoute>
-                      <TripsPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/trips/:id"
-                  element={
-                    <ProtectedRoute>
-                      <TripDetailPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/favorites"
-                  element={
-                    <ProtectedRoute>
-                      <FavoritesPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <ProfileDashboardPage />
-                    </ProtectedRoute>
-                  }
-                />
-              </Route>
-            </Routes>
-          </Suspense>
-        </FavoritesProvider>
-      </AuthProvider>
+                  <Route
+                    path="/trips"
+                    element={
+                      <ProtectedRoute>
+                        <TripsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/trips/:id"
+                    element={
+                      <ProtectedRoute>
+                        <TripDetailPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/favorites"
+                    element={
+                      <ProtectedRoute>
+                        <FavoritesPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <ProfileDashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Route>
+              </Routes>
+            </Suspense>
+          </FavoritesProvider>
+        </AuthProvider>
+      </OnlineStatusProvider>
     </BrowserRouter>
   )
 }

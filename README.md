@@ -32,6 +32,8 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Full responsive design pass (verified on mobile/tablet/desktop, zero horizontal-overflow issues)
 - [x] Testing (39 backend API tests; full frontend flows verified end-to-end in a real browser)
 - [x] Deployment preparation (production security settings, WhiteNoise static files, gunicorn, Procfile, Vercel SPA rewrite)
+- [x] Progressive Web App — installable, service worker with offline caching, update-available prompt
+- [x] Offline trip itineraries (IndexedDB, "Save for Offline" per trip, offline reorder/remove/date-edit with a synced mutation queue, online/offline indicator)
 
 ## Technology Stack
 
