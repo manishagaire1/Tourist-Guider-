@@ -14,6 +14,7 @@ class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'country', 'description']
     ordering_fields = ['rating', 'name', 'created_at']
+    ordering = ['name']
 
     def get_queryset(self):
         return Destination.objects.annotate(places_count=Count('places'))

@@ -2,7 +2,7 @@
 
 A modern, full-stack travel platform for discovering destinations, planning trips, and exploring attractions, restaurants, and hotels — built as a portfolio project demonstrating full-stack development, REST API integration, authentication, database design, third-party API integration, responsive UI development, and deployment.
 
-> **Status:** In active development. This README grows alongside the build — see the Roadmap section for what's done and what's next.
+> **Status:** Feature-complete and deployment-ready. See the checklist below for what's built.
 
 ## Overview
 
@@ -29,9 +29,9 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Personalized recommendations (destinations tagged by interest, matched against saved travel preferences)
 - [x] Profile dashboard (stats, upcoming trip, weather, recommendations, editable preferences and profile)
 - [x] All Destinations directory with search
-- [ ] Full responsive design pass
-- [ ] Testing
-- [ ] Deployment preparation
+- [x] Full responsive design pass (verified on mobile/tablet/desktop, zero horizontal-overflow issues)
+- [x] Testing (39 backend API tests; full frontend flows verified end-to-end in a real browser)
+- [x] Deployment preparation (production security settings, WhiteNoise static files, gunicorn, Procfile, Vercel SPA rewrite)
 
 ## Technology Stack
 
@@ -157,6 +157,34 @@ Development uses SQLite by default — no setup required beyond `python manage.p
 ```
 DATABASE_URL=postgres://user:password@host:5432/tourist_guide
 ```
+
+## Testing
+
+Backend: 39 automated tests (Django REST Framework `APITestCase`) covering auth (register/login/logout/token blacklisting), travel preferences, destination/place filtering, recommendation ranking, favorites (including duplicate/conflicting-target rejection), review ownership and duplicate prevention, and trip/itinerary ownership permissions.
+
+```bash
+cd backend
+python manage.py test
+```
+
+Frontend flows (registration, login/logout, search, filters, map, place details, favorites, trip creation, itinerary editing, reviews, weather, mobile responsiveness, and API error states) were verified end-to-end in a real browser during development.
+
+## Deployment
+
+**Backend (Render / Railway):**
+
+1. Set environment variables from `backend/.env.example` in the platform's dashboard — at minimum `SECRET_KEY`, `DEBUG=false`, `ALLOWED_HOSTS`, `DATABASE_URL` (a managed PostgreSQL instance), and `CORS_ALLOWED_ORIGINS` (your deployed frontend URL).
+2. Build command: `pip install -r requirements.txt && python manage.py collectstatic --noinput`
+3. Start command: `gunicorn config.wsgi --log-file -` (also defined in `backend/Procfile`, along with a `release: python manage.py migrate` step for platforms that support release phases).
+4. Static files are served in production via WhiteNoise — no separate static host needed.
+
+**Frontend (Vercel):**
+
+1. Set `VITE_API_BASE_URL` to your deployed backend's `/api` URL, and `VITE_USE_MOCK_DATA=false` once real map/weather API keys are set.
+2. Build command: `npm run build`, output directory: `dist`.
+3. `frontend/vercel.json` rewrites all routes to `index.html` so client-side routing (React Router) works on direct navigation and refresh.
+
+**Database:** PostgreSQL in production (SQLite is dev-only). Point `DATABASE_URL` at a managed Postgres instance (Render/Railway both offer one).
 
 ## Roadmap / Future Improvements
 

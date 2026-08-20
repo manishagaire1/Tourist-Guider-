@@ -20,4 +20,11 @@ class FavoriteSerializer(serializers.ModelSerializer):
         place = attrs.get('place')
         if bool(destination) == bool(place):
             raise serializers.ValidationError('Provide exactly one of destination or place.')
+
+        user = self.context['request'].user
+        already_favorited = Favorite.objects.filter(
+            user=user, destination=destination, place=place,
+        ).exists()
+        if already_favorited:
+            raise serializers.ValidationError("You've already saved this to favorites.")
         return attrs

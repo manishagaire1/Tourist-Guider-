@@ -17,6 +17,7 @@ class PlaceViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['destination', 'category', 'price_range']
     search_fields = ['name', 'description', 'address']
     ordering_fields = ['rating', 'name', 'price_range']
+    ordering = ['-rating', 'name']
 
     def get_queryset(self):
         queryset = Place.objects.select_related('category', 'destination').annotate(
