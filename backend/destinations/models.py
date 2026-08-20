@@ -7,7 +7,7 @@ class Destination(models.Model):
     country = models.CharField(max_length=100)
     slug = models.SlugField(max_length=170, unique=True, blank=True)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='destinations/', blank=True, null=True)
+    image_url = models.URLField(blank=True)
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     best_time_to_visit = models.CharField(max_length=100, blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)

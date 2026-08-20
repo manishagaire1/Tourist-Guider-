@@ -14,7 +14,9 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Database models (users, destinations, places, categories, favorites, trips, itinerary items, reviews, travel preferences)
 - [x] REST API (destinations, places, favorites, trips, itinerary items, reviews)
 - [x] JWT authentication (register, login, logout with token blacklisting, protected routes, profile, travel preferences)
-- [ ] Homepage, navigation, hero search
+- [x] Frontend layout (responsive navbar with mobile menu, footer, auth context, protected routes)
+- [x] Homepage with hero search and live destinations grid
+- [x] Destination detail page (real data, places within a destination)
 - [ ] Explore & search with filters
 - [ ] Interactive map with nearby places
 - [ ] Place details page
@@ -82,6 +84,7 @@ pip install -r requirements.txt
 cp .env.example .env             # fill in SECRET_KEY, etc.
 python manage.py migrate
 python manage.py createsuperuser
+python manage.py seed_destinations   # optional: populate demo destinations/places
 python manage.py runserver
 ```
 

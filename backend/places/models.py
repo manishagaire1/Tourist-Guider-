@@ -41,7 +41,7 @@ class Place(models.Model):
     opening_hours = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=30, blank=True)
     website = models.URLField(blank=True)
-    image = models.ImageField(upload_to='places/', blank=True, null=True)
+    image_url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
