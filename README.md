@@ -12,8 +12,8 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 
 - [x] Project scaffolding (frontend + backend)
 - [x] Database models (users, destinations, places, categories, favorites, trips, itinerary items, reviews, travel preferences)
-- [ ] REST API (destinations, places, favorites, trips, reviews, recommendations)
-- [ ] JWT authentication (register, login, logout, protected routes, profile)
+- [x] REST API (destinations, places, favorites, trips, itinerary items, reviews)
+- [x] JWT authentication (register, login, logout with token blacklisting, protected routes, profile, travel preferences)
 - [ ] Homepage, navigation, hero search
 - [ ] Explore & search with filters
 - [ ] Interactive map with nearby places
@@ -120,6 +120,31 @@ Frontend runs at `http://localhost:5173`.
 | `VITE_USE_MOCK_DATA` | `true` to use mock data, `false` for live API calls |
 | `VITE_MAPBOX_TOKEN` / `VITE_GOOGLE_MAPS_KEY` | Map provider key |
 | `VITE_OPENWEATHER_KEY` | OpenWeather key |
+
+## API Endpoints
+
+**Auth** (`/api/auth/`)
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `register/` | Create an account |
+| POST | `login/` | Obtain JWT access + refresh tokens |
+| POST | `login/refresh/` | Refresh an access token |
+| POST | `logout/` | Blacklist a refresh token |
+| GET/PATCH | `profile/` | View or update the current user |
+| GET/PATCH | `profile/preferences/` | View or update travel interests |
+
+**Resources** (`/api/`) — standard DRF router endpoints (list/retrieve, plus create/update/delete where noted)
+
+| Endpoint | Access |
+|---|---|
+| `destinations/` | Read-only, public |
+| `categories/` | Read-only, public |
+| `places/` — filter by `destination`, `category`, `price_range`, `min_rating`; search via `?search=`; order via `?ordering=` | Read-only, public |
+| `favorites/` | Authenticated, scoped to the current user |
+| `trips/` | Authenticated, scoped to the current user |
+| `itinerary-items/` | Authenticated, scoped to trips the current user owns |
+| `reviews/` — filter by `?place=<id>`; one review per user per place | Read public, write authenticated (owner-only edit/delete) |
 
 ## Database Setup
 
