@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { MapPin, Star } from 'lucide-react'
+import FavoriteButton from '@/components/FavoriteButton'
 import type { Destination } from '@/types'
 
 function DestinationCard({ destination }: { destination: Destination }) {
@@ -15,6 +16,7 @@ function DestinationCard({ destination }: { destination: Destination }) {
           loading="lazy"
           className="size-full object-cover transition duration-300 group-hover:scale-105"
         />
+        <FavoriteButton type="destination" id={destination.id} className="absolute left-3 top-3" />
         <span className="absolute right-3 top-3 flex items-center gap-1 rounded-pill bg-white/90 px-2.5 py-1 text-xs font-semibold text-neutral-800 shadow-sm">
           <Star className="size-3.5 fill-accent-500 text-accent-500" />
           {Number(destination.rating).toFixed(1)}

@@ -19,13 +19,13 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Destination detail page (real data, places within a destination)
 - [x] Explore & search with filters (category, destination, price, rating)
 - [x] Interactive map (Leaflet + OpenStreetMap) with marker popups and "Places Near Me" geolocation
-- [ ] Place details page
-- [ ] Favorites
-- [ ] Trip planner with day-by-day itinerary
+- [x] Place details page (gallery image, reviews, favorite, add to trip, directions, share)
+- [x] Favorites (destinations and places, add/remove, synced across the app)
+- [x] Trip planner with day-by-day itinerary (add/remove/reorder places, edit dates)
+- [x] Reviews & ratings (write/edit/delete own review, one per user per place)
 - [ ] Weather integration
 - [ ] Travel budget calculator
 - [ ] Travel tips
-- [ ] Reviews & ratings
 - [ ] Personalized recommendations
 - [ ] Profile dashboard
 - [ ] Full responsive design pass

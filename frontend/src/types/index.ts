@@ -67,3 +67,46 @@ export interface Paginated<T> {
   previous: string | null
   results: T[]
 }
+
+export interface Favorite {
+  id: number
+  destination: number | null
+  place: number | null
+  destination_detail: Destination | null
+  place_detail: Place | null
+  created_at: string
+}
+
+export interface Review {
+  id: number
+  place: number
+  user: number
+  user_display: string
+  rating: number
+  comment: string
+  created_at: string
+  updated_at: string
+}
+
+export interface ItineraryItem {
+  id: number
+  trip: number
+  place: number
+  place_detail: Place
+  day_number: number
+  time: string | null
+  order: number
+  notes: string
+}
+
+export interface Trip {
+  id: number
+  name: string
+  destination: number | null
+  destination_name: string | null
+  start_date: string
+  end_date: string
+  notes: string
+  itinerary_items: ItineraryItem[]
+  created_at: string
+}
