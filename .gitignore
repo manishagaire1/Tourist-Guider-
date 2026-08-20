@@ -1,3 +1,6 @@
+# Root (npm workspace scripts)
+node_modules/
+
 # Frontend
 frontend/node_modules/
 frontend/dist/

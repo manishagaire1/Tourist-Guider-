@@ -102,6 +102,15 @@ npm run dev
 
 Frontend runs at `http://localhost:5173`.
 
+### Running both at once
+
+After completing both setups above, a root-level convenience script starts backend + frontend together with one command:
+
+```bash
+npm install       # once, at the project root — installs `concurrently`
+npm run dev
+```
+
 ## Environment Variables
 
 **`backend/.env`**
