@@ -25,8 +25,8 @@ DESTINATIONS = [
         'latitude': 35.6762, 'longitude': 139.6503,
         'description': "Japan's neon-lit capital, blending ancient temples with futuristic skyscrapers.",
         'places': [
-            ('Senso-ji Temple', 'Temples', 4.7, '$', 'Ancient Buddhist temple in historic Asakusa.'),
-            ('Tokyo Skytree', 'Attractions', 4.6, '$$', 'Iconic broadcast tower with panoramic city views.'),
+            ('Senso-ji Temple', 'Temples', 4.7, '$', 'Ancient Buddhist temple in historic Asakusa.', 35.7148, 139.7967),
+            ('Tokyo Skytree', 'Attractions', 4.6, '$$', 'Iconic broadcast tower with panoramic city views.', 35.7101, 139.8107),
         ],
     },
     {
@@ -34,8 +34,8 @@ DESTINATIONS = [
         'latitude': 35.0116, 'longitude': 135.7681,
         'description': "Japan's cultural heart — thousands of temples, shrines, and historic geisha districts.",
         'places': [
-            ('Fushimi Inari Shrine', 'Temples', 4.8, '$', 'Famous shrine with thousands of vermillion torii gates.'),
-            ('Arashiyama Bamboo Grove', 'Parks', 4.6, '$', 'A serene, towering bamboo forest path.'),
+            ('Fushimi Inari Shrine', 'Temples', 4.8, '$', 'Famous shrine with thousands of vermillion torii gates.', 34.9671, 135.7727),
+            ('Arashiyama Bamboo Grove', 'Parks', 4.6, '$', 'A serene, towering bamboo forest path.', 35.0094, 135.6683),
         ],
     },
     {
@@ -43,8 +43,8 @@ DESTINATIONS = [
         'latitude': 34.6937, 'longitude': 135.5023,
         'description': "A food-lover's paradise known for street eats, nightlife, and Osaka Castle.",
         'places': [
-            ('Osaka Castle', 'Historical Places', 4.5, '$', "One of Japan's most iconic historical landmarks."),
-            ('Dotonbori', 'Nightlife', 4.6, '$$', 'Neon-lit dining and entertainment district.'),
+            ('Osaka Castle', 'Historical Places', 4.5, '$', "One of Japan's most iconic historical landmarks.", 34.6873, 135.5262),
+            ('Dotonbori', 'Nightlife', 4.6, '$$', 'Neon-lit dining and entertainment district.', 34.6687, 135.5012),
         ],
     },
     {
@@ -52,8 +52,8 @@ DESTINATIONS = [
         'latitude': 33.5904, 'longitude': 130.4017,
         'description': 'A laid-back coastal city famous for tonkotsu ramen, beaches, and easy nature access.',
         'places': [
-            ('Ohori Park', 'Parks', 4.4, '$', 'Scenic lakeside park in the heart of the city.'),
-            ('Yatai Food Stalls', 'Restaurants', 4.7, '$', 'Open-air street food stalls serving local specialties.'),
+            ('Ohori Park', 'Parks', 4.4, '$', 'Scenic lakeside park in the heart of the city.', 33.5845, 130.3808),
+            ('Yatai Food Stalls', 'Restaurants', 4.7, '$', 'Open-air street food stalls serving local specialties.', 33.5926, 130.4092),
         ],
     },
     {
@@ -61,8 +61,8 @@ DESTINATIONS = [
         'latitude': 48.8566, 'longitude': 2.3522,
         'description': 'The City of Light — iconic landmarks, world-class art, and unforgettable cuisine.',
         'places': [
-            ('Eiffel Tower', 'Attractions', 4.7, '$$', "The world-famous iron lattice tower on the Champ de Mars."),
-            ('Louvre Museum', 'Museums', 4.8, '$$', "The world's largest art museum, home to the Mona Lisa."),
+            ('Eiffel Tower', 'Attractions', 4.7, '$$', "The world-famous iron lattice tower on the Champ de Mars.", 48.8584, 2.2945),
+            ('Louvre Museum', 'Museums', 4.8, '$$', "The world's largest art museum, home to the Mona Lisa.", 48.8606, 2.3376),
         ],
     },
     {
@@ -70,8 +70,8 @@ DESTINATIONS = [
         'latitude': 51.5072, 'longitude': -0.1276,
         'description': 'A historic global capital packed with museums, royal landmarks, and diverse culture.',
         'places': [
-            ('British Museum', 'Museums', 4.8, '$', 'World-renowned museum of human history and culture.'),
-            ('Tower Bridge', 'Attractions', 4.7, '$', 'Iconic Victorian bascule bridge over the Thames.'),
+            ('British Museum', 'Museums', 4.8, '$', 'World-renowned museum of human history and culture.', 51.5194, -0.1270),
+            ('Tower Bridge', 'Attractions', 4.7, '$', 'Iconic Victorian bascule bridge over the Thames.', 51.5055, -0.0754),
         ],
     },
     {
@@ -79,8 +79,8 @@ DESTINATIONS = [
         'latitude': 40.7128, 'longitude': -74.0060,
         'description': 'The city that never sleeps — an iconic skyline, Broadway, and nonstop energy.',
         'places': [
-            ('Central Park', 'Parks', 4.8, '$', 'Sprawling urban park in the middle of Manhattan.'),
-            ('Times Square', 'Attractions', 4.5, '$$', 'The dazzling, billboard-lit heart of NYC.'),
+            ('Central Park', 'Parks', 4.8, '$', 'Sprawling urban park in the middle of Manhattan.', 40.7829, -73.9654),
+            ('Times Square', 'Attractions', 4.5, '$$', 'The dazzling, billboard-lit heart of NYC.', 40.7580, -73.9855),
         ],
     },
     {
@@ -88,8 +88,8 @@ DESTINATIONS = [
         'latitude': 25.2048, 'longitude': 55.2708,
         'description': 'A futuristic desert metropolis of record-breaking skyscrapers and luxury shopping.',
         'places': [
-            ('Burj Khalifa', 'Attractions', 4.8, '$$$', "The world's tallest building, with an observation deck."),
-            ('Dubai Mall', 'Shopping', 4.6, '$$', 'One of the largest shopping malls on Earth.'),
+            ('Burj Khalifa', 'Attractions', 4.8, '$$$', "The world's tallest building, with an observation deck.", 25.1972, 55.2744),
+            ('Dubai Mall', 'Shopping', 4.6, '$$', 'One of the largest shopping malls on Earth.', 25.1975, 55.2796),
         ],
     },
     {
@@ -97,8 +97,8 @@ DESTINATIONS = [
         'latitude': 27.7172, 'longitude': 85.3240,
         'description': 'Gateway to the Himalayas, rich with ancient temples and mountain adventure.',
         'places': [
-            ('Swayambhunath Stupa', 'Temples', 4.7, '$', 'Ancient hilltop stupa overlooking the Kathmandu valley.'),
-            ('Thamel Market', 'Shopping', 4.4, '$', 'Bustling tourist quarter of shops, cafés, and trekking gear.'),
+            ('Swayambhunath Stupa', 'Temples', 4.7, '$', 'Ancient hilltop stupa overlooking the Kathmandu valley.', 27.7149, 85.2903),
+            ('Thamel Market', 'Shopping', 4.4, '$', 'Bustling tourist quarter of shops, cafés, and trekking gear.', 27.7154, 85.3123),
         ],
     },
     {
@@ -106,8 +106,8 @@ DESTINATIONS = [
         'latitude': -33.8688, 'longitude': 151.2093,
         'description': 'A stunning harbor city famous for its Opera House, beaches, and outdoor lifestyle.',
         'places': [
-            ('Sydney Opera House', 'Attractions', 4.8, '$$', 'World-famous performing arts venue on the harbour.'),
-            ('Bondi Beach', 'Beaches', 4.6, '$', "Sydney's most iconic beach and coastal walk."),
+            ('Sydney Opera House', 'Attractions', 4.8, '$$', 'World-famous performing arts venue on the harbour.', -33.8568, 151.2153),
+            ('Bondi Beach', 'Beaches', 4.6, '$', "Sydney's most iconic beach and coastal walk.", -33.8908, 151.2743),
         ],
     },
 ]
@@ -143,7 +143,7 @@ class Command(BaseCommand):
             )
             destination_count += 1
 
-            for place_name, category_name, rating, price_range, description in entry['places']:
+            for place_name, category_name, rating, price_range, description, lat, lng in entry['places']:
                 Place.objects.update_or_create(
                     name=place_name, destination=destination,
                     defaults={
@@ -153,6 +153,8 @@ class Command(BaseCommand):
                         'description': description,
                         'address': f'{entry["name"]}, {entry["country"]}',
                         'image_url': picsum(place_name),
+                        'latitude': lat,
+                        'longitude': lng,
                     },
                 )
                 place_count += 1

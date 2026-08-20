@@ -17,8 +17,8 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Frontend layout (responsive navbar with mobile menu, footer, auth context, protected routes)
 - [x] Homepage with hero search and live destinations grid
 - [x] Destination detail page (real data, places within a destination)
-- [ ] Explore & search with filters
-- [ ] Interactive map with nearby places
+- [x] Explore & search with filters (category, destination, price, rating)
+- [x] Interactive map (Leaflet + OpenStreetMap) with marker popups and "Places Near Me" geolocation
 - [ ] Place details page
 - [ ] Favorites
 - [ ] Trip planner with day-by-day itinerary
@@ -37,7 +37,7 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 **Frontend:** React, Vite, TypeScript, Tailwind CSS, React Router, Axios, Lucide React
 **Backend:** Python, Django, Django REST Framework, Simple JWT
 **Database:** SQLite (development), PostgreSQL (production-ready via `DATABASE_URL`)
-**APIs:** Mapbox/Google Maps, OpenWeather, REST Countries (integrated behind a mock-data-first service layer — see below)
+**APIs:** Leaflet + OpenStreetMap (free, keyless — used for the interactive map), OpenWeather, REST Countries (weather integrated behind a mock-data-first service layer — see below)
 
 ## Architecture
 

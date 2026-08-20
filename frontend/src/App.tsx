@@ -4,6 +4,8 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 import MainLayout from '@/layouts/MainLayout'
 import HomePage from '@/pages/HomePage'
 import DestinationDetailPage from '@/pages/DestinationDetailPage'
+import ExplorePage from '@/pages/ExplorePage'
+import MapPage from '@/pages/MapPage'
 import LoginPage from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
 import ComingSoonPage from '@/pages/ComingSoonPage'
@@ -19,15 +21,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
-            <Route
-              path="/explore"
-              element={
-                <ComingSoonPage
-                  title="Explore Places"
-                  description="Search and filter attractions, restaurants, hotels, and more — coming in the next phase."
-                />
-              }
-            />
+            <Route path="/explore" element={<ExplorePage />} />
             <Route
               path="/destinations"
               element={
@@ -37,15 +31,7 @@ function App() {
                 />
               }
             />
-            <Route
-              path="/map"
-              element={
-                <ComingSoonPage
-                  title="Interactive Map"
-                  description="Browse attractions, restaurants, and hotels on an interactive map — coming soon."
-                />
-              }
-            />
+            <Route path="/map" element={<MapPage />} />
             <Route
               path="/travel-tips"
               element={
