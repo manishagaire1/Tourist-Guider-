@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowDown, ArrowUp, CalendarRange, Plus, Trash2 } from 'lucide-react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ArrowDown, ArrowUp, Calculator, CalendarRange, Plus, Trash2 } from 'lucide-react'
 import { fetchPlaces } from '@/services/placesService'
 import {
   addItineraryItem,
@@ -117,13 +117,22 @@ function TripDetailPage() {
           <h1 className="text-2xl font-semibold text-neutral-900">{trip.name}</h1>
           {trip.destination_name && <p className="mt-1 text-neutral-500">{trip.destination_name}</p>}
         </div>
-        <button
-          onClick={handleDeleteTrip}
-          className="flex items-center gap-1.5 rounded-pill border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 hover:border-red-300 hover:text-red-600"
-        >
-          <Trash2 className="size-4" />
-          Delete Trip
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/budget-calculator"
+            className="flex items-center gap-1.5 rounded-pill border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 hover:border-accent-500 hover:text-accent-600"
+          >
+            <Calculator className="size-4" />
+            Estimate Budget
+          </Link>
+          <button
+            onClick={handleDeleteTrip}
+            className="flex items-center gap-1.5 rounded-pill border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 hover:border-red-300 hover:text-red-600"
+          >
+            <Trash2 className="size-4" />
+            Delete Trip
+          </button>
+        </div>
       </div>
 
       <div className="mb-10 flex flex-wrap items-center gap-3 rounded-card border border-neutral-200 bg-white p-4">

@@ -11,6 +11,7 @@ import MapPage from '@/pages/MapPage'
 import FavoritesPage from '@/pages/FavoritesPage'
 import TripsPage from '@/pages/TripsPage'
 import TripDetailPage from '@/pages/TripDetailPage'
+import BudgetCalculatorPage from '@/pages/BudgetCalculatorPage'
 import LoginPage from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
 import ComingSoonPage from '@/pages/ComingSoonPage'
@@ -39,6 +40,7 @@ function App() {
                 }
               />
               <Route path="/map" element={<MapPage />} />
+              <Route path="/budget-calculator" element={<BudgetCalculatorPage />} />
               <Route
                 path="/travel-tips"
                 element={

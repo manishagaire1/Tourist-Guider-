@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { CalendarRange, MapPin, Star } from 'lucide-react'
+import FavoriteButton from '@/components/FavoriteButton'
 import PlaceCard from '@/components/PlaceCard'
+import WeatherCard from '@/components/WeatherCard'
 import { fetchDestination } from '@/services/destinationsService'
 import { fetchPlaces } from '@/services/placesService'
 import type { Destination, Place } from '@/types'
@@ -54,6 +56,7 @@ function DestinationDetailPage() {
       <div className="relative h-72 overflow-hidden sm:h-96">
         <img src={destination.image_url} alt={destination.name} className="size-full object-cover" />
         <div className="absolute inset-0 bg-linear-to-t from-neutral-950/80 via-neutral-950/20 to-transparent" />
+        <FavoriteButton type="destination" id={destination.id} className="absolute right-4 top-4" />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-semibold text-white sm:text-4xl">{destination.name}</h1>
           <p className="mt-1 flex items-center gap-1 text-primary-100">
@@ -77,6 +80,10 @@ function DestinationDetailPage() {
         </div>
 
         <p className="max-w-3xl py-6 text-neutral-700">{destination.description}</p>
+
+        <div className="mb-10 max-w-lg">
+          <WeatherCard destinationName={destination.name} />
+        </div>
 
         <h2 className="mb-4 text-xl font-semibold text-neutral-900">Things to do in {destination.name}</h2>
         {places.length === 0 ? (

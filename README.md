@@ -23,8 +23,8 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Favorites (destinations and places, add/remove, synced across the app)
 - [x] Trip planner with day-by-day itinerary (add/remove/reorder places, edit dates)
 - [x] Reviews & ratings (write/edit/delete own review, one per user per place)
-- [ ] Weather integration
-- [ ] Travel budget calculator
+- [x] Weather integration (mock-data-first service layer, real forecast UI, activity recommendations)
+- [x] Travel budget calculator (live breakdown by category, per-traveler/per-day estimates)
 - [ ] Travel tips
 - [ ] Personalized recommendations
 - [ ] Profile dashboard
