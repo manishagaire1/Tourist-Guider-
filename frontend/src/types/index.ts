@@ -117,6 +117,7 @@ export interface ItineraryItem {
 
 export interface TravelPreference {
   interests: string[]
+  preferred_currency: string
   updated_at: string
 }
 

@@ -1,6 +1,15 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Calculator } from 'lucide-react'
+import { AlertTriangle, Calculator } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
+import { fetchTravelPreferences, updateTravelPreferences } from '@/services/authService'
+import { fetchExchangeRates, type ExchangeRates } from '@/services/currencyService'
+import {
+  SUPPORTED_CURRENCIES,
+  convertCurrency,
+  detectDefaultCurrency,
+  formatCurrency,
+} from '@/utils/currency'
 
 interface BudgetCategory {
   key: string
@@ -9,8 +18,22 @@ interface BudgetCategory {
   amount: number
 }
 
+const CURRENCY_STORAGE_KEY = 'preferredCurrency'
+
+function relativeUpdatedLabel(
+  t: (key: string, options?: Record<string, unknown>) => string,
+  updatedAt: string | null,
+): string {
+  if (!updatedAt) return ''
+  const minutes = Math.max(0, Math.round((Date.now() - Date.parse(updatedAt)) / 60000))
+  if (minutes < 1) return t('currency.updatedJustNow')
+  if (minutes < 60) return t('currency.updatedMinutesAgo', { count: minutes })
+  return t('currency.updatedHoursAgo', { count: Math.round(minutes / 60) })
+}
+
 function BudgetCalculatorPage() {
   const { t, i18n } = useTranslation()
+  const { user } = useAuth()
   const [travelers, setTravelers] = useState(2)
   const [days, setDays] = useState(5)
   const [hotelPerNight, setHotelPerNight] = useState(120)
@@ -19,10 +42,42 @@ function BudgetCalculatorPage() {
   const [activityPerDay, setActivityPerDay] = useState(30)
   const [shoppingTotal, setShoppingTotal] = useState(200)
 
-  const currencyFormatter = useMemo(
-    () => new Intl.NumberFormat(i18n.language, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }),
-    [i18n.language],
-  )
+  const [currency, setCurrency] = useState(() => localStorage.getItem(CURRENCY_STORAGE_KEY) ?? detectDefaultCurrency(i18n.language))
+  const [rates, setRates] = useState<ExchangeRates | null>(null)
+  const [ratesUnavailable, setRatesUnavailable] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      fetchTravelPreferences().then((preference) => {
+        if (preference.preferred_currency) setCurrency(preference.preferred_currency)
+      })
+    }
+  }, [user])
+
+  useEffect(() => {
+    fetchExchangeRates('USD')
+      .then(setRates)
+      .catch(() => setRatesUnavailable(true))
+  }, [])
+
+  function handleCurrencyChange(nextCurrency: string) {
+    setCurrency(nextCurrency)
+    localStorage.setItem(CURRENCY_STORAGE_KEY, nextCurrency)
+    if (user) {
+      updateTravelPreferences({ preferred_currency: nextCurrency }).catch(() => {
+        // best-effort — the localStorage value above still keeps the choice for this session
+      })
+    }
+  }
+
+  const hasLiveRate = currency !== 'USD' && !!rates?.rates[currency]
+  const displayCurrency = currency === 'USD' || hasLiveRate ? currency : 'USD'
+
+  function convertAmount(usdAmount: number): number {
+    if (displayCurrency === 'USD' || !rates) return usdAmount
+    return convertCurrency(usdAmount, 'USD', displayCurrency, rates.rates) ?? usdAmount
+  }
+
   const percentFormatter = useMemo(() => new Intl.NumberFormat(i18n.language), [i18n.language])
 
   const categories: BudgetCategory[] = useMemo(
@@ -37,6 +92,7 @@ function BudgetCalculatorPage() {
   )
 
   const total = categories.reduce((sum, category) => sum + category.amount, 0)
+  const format = (usdAmount: number) => formatCurrency(convertAmount(usdAmount), displayCurrency, i18n.language)
 
   return (
     <main className="mx-auto max-w-4xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
@@ -52,6 +108,21 @@ function BudgetCalculatorPage() {
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div className="flex flex-col gap-4 rounded-card border border-neutral-200 bg-white p-6">
+          <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
+            {t('currency.budgetCurrency')}
+            <select
+              value={currency}
+              onChange={(event) => handleCurrencyChange(event.target.value)}
+              className="rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-primary-400"
+            >
+              {SUPPORTED_CURRENCIES.map((option) => (
+                <option key={option.code} value={option.code}>
+                  {t(option.labelKey)}
+                </option>
+              ))}
+            </select>
+          </label>
+
           <div className="grid grid-cols-2 gap-4">
             <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
               {t('budget.travelers')}
@@ -130,13 +201,37 @@ function BudgetCalculatorPage() {
         <div className="flex flex-col gap-6 rounded-card border border-neutral-200 bg-white p-6">
           <div>
             <p className="text-sm text-neutral-500">{t('budget.estimatedTotal')}</p>
-            <p className="text-4xl font-semibold text-neutral-900">{currencyFormatter.format(total)}</p>
+            <p className="text-4xl font-semibold text-neutral-900">{format(total)}</p>
             <p className="mt-1 text-sm text-neutral-500">
               {t('budget.perTravelerPerDay', {
-                perTraveler: currencyFormatter.format(Math.round(total / travelers)),
-                perDay: currencyFormatter.format(Math.round(total / days)),
+                perTraveler: format(Math.round(total / travelers)),
+                perDay: format(Math.round(total / days)),
               })}
             </p>
+
+            {displayCurrency !== 'USD' && rates && (
+              <p className="mt-2 text-xs text-neutral-400">
+                {t('currency.rateLine', { rate: rates.rates[displayCurrency]?.toFixed(2), currency: displayCurrency })}
+                {' · '}
+                {relativeUpdatedLabel(t, rates.updated_at)}
+                {rates.cached && ` · ${t('currency.usingCachedRate')}`}
+              </p>
+            )}
+
+            {currency !== 'USD' && !hasLiveRate && (
+              <p className="mt-2 flex items-start gap-1.5 text-xs text-accent-700">
+                <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
+                <span>
+                  {t('currency.unavailable')} {t('currency.continuingInUsd')}
+                </span>
+              </p>
+            )}
+            {ratesUnavailable && currency === 'USD' && (
+              <p className="mt-2 flex items-start gap-1.5 text-xs text-neutral-400">
+                <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
+                <span>{t('currency.unavailable')}</span>
+              </p>
+            )}
           </div>
 
           <div className="flex h-3 w-full overflow-hidden rounded-pill bg-neutral-100">
@@ -157,7 +252,7 @@ function BudgetCalculatorPage() {
                   {t(category.labelKey)}
                 </span>
                 <span className="font-medium text-neutral-900">
-                  {currencyFormatter.format(category.amount)}
+                  {format(category.amount)}
                   <span className="ml-2 text-xs text-neutral-400">
                     {percentFormatter.format(total > 0 ? Math.round((category.amount / total) * 100) : 0)}%
                   </span>

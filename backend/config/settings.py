@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'trips',
     'reviews',
     'favorites',
+    'bookings',
+    'currency',
 ]
 
 MIDDLEWARE = [
@@ -189,3 +191,22 @@ CORS_ALLOWED_ORIGINS = env.list(
 
 OPENWEATHER_API_KEY = env('OPENWEATHER_API_KEY', default='')
 MAPS_API_KEY = env('MAPS_API_KEY', default='')
+
+VIATOR_API_KEY = env('VIATOR_API_KEY', default='')
+VIATOR_PARTNER_ID = env('VIATOR_PARTNER_ID', default='')
+VIATOR_BASE_URL = env('VIATOR_BASE_URL', default='https://api.sandbox.viator.com/partner')
+
+CURRENCY_API_KEY = env('CURRENCY_API_KEY', default='')
+CURRENCY_API_BASE_URL = env('CURRENCY_API_BASE_URL', default='https://v6.exchangerate-api.com/v6')
+
+
+# Cache — used to hold exchange-rate responses for CACHE_TTL_SECONDS so the
+# calculator doesn't trigger a live API call on every keystroke. Local-memory
+# is sufficient for a single-process deployment; swap for a shared backend
+# (e.g. Redis) behind multiple app servers.
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}

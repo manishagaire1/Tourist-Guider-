@@ -1,5 +1,11 @@
 {
   "rewrites": [
+    { "source": "/destinations/:id(\\d+)", "destination": "/destinations/:id/index.html" },
+    { "source": "/places/:id(\\d+)", "destination": "/places/:id/index.html" },
+    { "source": "/travel-tips/:slug([a-z-]+)", "destination": "/travel-tips/:slug/index.html" },
+    { "source": "/destinations", "destination": "/destinations/index.html" },
+    { "source": "/explore", "destination": "/explore/index.html" },
+    { "source": "/travel-tips", "destination": "/travel-tips/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

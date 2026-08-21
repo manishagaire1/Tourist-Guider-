@@ -69,7 +69,7 @@ function ProfileDashboardPage() {
   }
 
   async function handleSavePreferences() {
-    await updateTravelPreferences(interests)
+    await updateTravelPreferences({ interests })
     const response = await fetchRecommendations()
     setRecommendations(response.results)
     setSavedMessage(t('profile.preferencesSaved'))

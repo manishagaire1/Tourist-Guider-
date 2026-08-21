@@ -35,6 +35,9 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Progressive Web App — installable, service worker with offline caching, update-available prompt
 - [x] Offline trip itineraries (IndexedDB, "Save for Offline" per trip, offline reorder/remove/date-edit with a synced mutation queue, online/offline indicator)
 - [x] Multi-language support (English, Japanese, Nepali, Hindi — i18next-driven UI, translated destination/place/category content stored per-language on the existing records, locale-aware date/currency formatting, language switcher in the navbar)
+- [x] Real-time tour availability & booking via the Viator Partner API (backend proxy, curated product-mapping table, live availability check, deep-link booking — fully wired, inert until real credentials are supplied; see Configuration below)
+- [x] SEO prerendering for public pages (build-time metadata/Open Graph/Twitter/JSON-LD generation + real content snapshots, dynamic sitemap.xml/robots.txt — no framework migration)
+- [x] Live currency conversion in the Budget Calculator (USD/JPY/EUR/GBP/AUD/CAD/NPR/INR via a backend-cached exchange-rate proxy, `Intl.NumberFormat` locale-aware formatting, graceful "rates unavailable" fallback — never a fabricated rate)
 
 ## Technology Stack
 
@@ -127,6 +130,11 @@ npm run dev
 | `CORS_ALLOWED_ORIGINS` | Comma-separated frontend origins |
 | `OPENWEATHER_API_KEY` | OpenWeather API key (server-side) |
 | `MAPS_API_KEY` | Maps provider API key (server-side) |
+| `VIATOR_API_KEY` | Viator Partner API key. Leave blank to run with booking disabled ("Booking not available" everywhere — never fake availability) |
+| `VIATOR_PARTNER_ID` | Viator partner ID |
+| `VIATOR_BASE_URL` | Defaults to Viator's sandbox base URL |
+| `CURRENCY_API_KEY` | exchangerate-api.com (v6) key. Leave blank to run with currency conversion disabled (the calculator reports rates unavailable rather than faking one) |
+| `CURRENCY_API_BASE_URL` | Defaults to `https://v6.exchangerate-api.com/v6` |
 
 **`frontend/.env`**
 
@@ -136,6 +144,7 @@ npm run dev
 | `VITE_USE_MOCK_DATA` | `true` to use mock data, `false` for live API calls |
 | `VITE_MAPBOX_TOKEN` / `VITE_GOOGLE_MAPS_KEY` | Map provider key |
 | `VITE_OPENWEATHER_KEY` | OpenWeather key |
+| `VITE_SITE_URL` | Public site origin (no trailing slash) — used for canonical URLs, `og:url`, and `sitemap.xml`. Set to the real deployed domain before building for production |
 
 ## API Endpoints
 
@@ -161,6 +170,9 @@ npm run dev
 | `trips/` | Authenticated, scoped to the current user |
 | `itinerary-items/` | Authenticated, scoped to trips the current user owns |
 | `reviews/` — filter by `?place=<id>`; one review per user per place | Read public, write authenticated (owner-only edit/delete) |
+| `places/<id>/tours/` | Read-only, public — real Viator products mapped to this place (empty list if none, or if Viator isn't configured) |
+| `places/<id>/tours/<product_code>/availability/` — `POST {date, travelers}` | Read-only, public — real-time availability proxy to Viator |
+| `currency/rates/?base=USD` | Read-only, public — live exchange rates, backend-cached |
 
 ## Database Setup
 
@@ -172,7 +184,7 @@ DATABASE_URL=postgres://user:password@host:5432/tourist_guide
 
 ## Testing
 
-Backend: 39 automated tests (Django REST Framework `APITestCase`) covering auth (register/login/logout/token blacklisting), travel preferences, destination/place filtering, recommendation ranking, favorites (including duplicate/conflicting-target rejection), review ownership and duplicate prevention, and trip/itinerary ownership permissions.
+Backend: 56 automated tests (Django REST Framework `APITestCase`) covering auth (register/login/logout/token blacklisting), travel preferences (including `preferred_currency`), destination/place filtering, recommendation ranking, favorites (including duplicate/conflicting-target rejection), review ownership and duplicate prevention, trip/itinerary ownership permissions, the Viator tours/availability proxy (empty-mapping, not-configured, and error-mapping cases, mocked at the HTTP boundary), and the currency-rates endpoint (live fetch, cache fallback on provider failure, and the no-cache-available error case).
 
 ```bash
 cd backend
@@ -192,9 +204,9 @@ Frontend flows (registration, login/logout, search, filters, map, place details,
 
 **Frontend (Vercel):**
 
-1. Set `VITE_API_BASE_URL` to your deployed backend's `/api` URL, and `VITE_USE_MOCK_DATA=false` once real map/weather API keys are set.
-2. Build command: `npm run build`, output directory: `dist`.
-3. `frontend/vercel.json` rewrites all routes to `index.html` so client-side routing (React Router) works on direct navigation and refresh.
+1. Set `VITE_API_BASE_URL` to your deployed backend's `/api` URL, `VITE_SITE_URL` to your real production domain, and `VITE_USE_MOCK_DATA=false` once real map/weather API keys are set.
+2. Build command: `npm run build` (runs `tsc -b && vite build && node scripts/prerender.mjs` — the prerender step calls the live backend at `VITE_API_BASE_URL`, so the backend must already be deployed and reachable at build time), output directory: `dist`. A `build:no-prerender` script is available as a fallback if the backend isn't reachable during a given build.
+3. `frontend/vercel.json` rewrites the known prerendered public routes (`/destinations/:id`, `/places/:id`, `/travel-tips/:slug`, and the list pages) to their static `index.html` files, with a catch-all falling back to the SPA shell for everything else — so both real per-page SEO metadata and normal client-side routing work correctly.
 
 **Database:** PostgreSQL in production (SQLite is dev-only). Point `DATABASE_URL` at a managed Postgres instance (Render/Railway both offer one).
 
@@ -204,9 +216,10 @@ Frontend flows (registration, login/logout, search, filters, map, place details,
 
 ## Roadmap / Future Improvements
 
-- Real-time availability and booking integrations (Viator)
-- Server-side rendering / static generation for SEO on public pages
-- Live currency conversion for the budget calculator (currently USD-denominated with locale-aware formatting)
+- Real currency conversion rates (needs a `CURRENCY_API_KEY` from exchangerate-api.com)
+- Real Viator bookings (needs `VIATOR_API_KEY`/`VIATOR_PARTNER_ID`, plus real product codes added per place via Django admin)
+- URL-based language routing (`/en/`, `/ja/`, …) and per-language SEO variants — the current prerendering is English-only
+- Full HTML-content SSR (not just metadata + a static snapshot) if deeper crawler indexing is ever needed beyond what's here
 
 ---
 

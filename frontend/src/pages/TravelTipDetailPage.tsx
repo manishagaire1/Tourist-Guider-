@@ -2,11 +2,15 @@ import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ArrowLeft } from 'lucide-react'
 import { getTravelTip } from '@/data/travelTips'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
+import { travelTipTitle } from '@/utils/seo'
 
 function TravelTipDetailPage() {
   const { t } = useTranslation()
   const { slug } = useParams<{ slug: string }>()
   const tip = slug ? getTravelTip(slug) : undefined
+
+  useDocumentTitle(tip ? travelTipTitle(tip.title) : undefined)
 
   if (!tip) {
     return (

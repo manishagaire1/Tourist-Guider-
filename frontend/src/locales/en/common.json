@@ -273,6 +273,41 @@
     "travelTips": "Travel Tips",
     "copyright": "© {{year}} Tourist Guide. Built as a full-stack portfolio project."
   },
+  "tours": {
+    "title": "Tours & Activities",
+    "fromPrice": "From {{price}}",
+    "viewAvailability": "View Availability",
+    "checkAvailability": "Check Availability",
+    "checking": "Checking…",
+    "continueToViator": "Continue to Viator",
+    "error": "We couldn't retrieve availability right now. Please try again later.",
+    "status": {
+      "available": "Available",
+      "limited": "Limited availability",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable"
+    }
+  },
+  "currency": {
+    "usd": "USD — US Dollar",
+    "jpy": "JPY — Japanese Yen",
+    "eur": "EUR — Euro",
+    "gbp": "GBP — British Pound",
+    "aud": "AUD — Australian Dollar",
+    "cad": "CAD — Canadian Dollar",
+    "npr": "NPR — Nepalese Rupee",
+    "inr": "INR — Indian Rupee",
+    "budgetCurrency": "Budget Currency",
+    "rateLine": "1 USD = {{rate}} {{currency}}",
+    "updatedJustNow": "Updated just now",
+    "updatedMinutesAgo_one": "Updated {{count}} minute ago",
+    "updatedMinutesAgo_other": "Updated {{count}} minutes ago",
+    "updatedHoursAgo_one": "Updated {{count}} hour ago",
+    "updatedHoursAgo_other": "Updated {{count}} hours ago",
+    "usingCachedRate": "Using cached rate.",
+    "unavailable": "Live exchange rates are temporarily unavailable.",
+    "continuingInUsd": "Continuing in USD."
+  },
   "interests": {
     "nature": "Nature",
     "history": "History",

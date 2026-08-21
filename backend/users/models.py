@@ -25,6 +25,9 @@ class TravelPreference(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='travel_preference')
     interests = models.JSONField(default=list, blank=True, help_text='List of Interest values')
+    preferred_currency = models.CharField(
+        max_length=3, blank=True, help_text='ISO 4217 code, e.g. "JPY" — optional, never required',
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

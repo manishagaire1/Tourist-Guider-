@@ -5,9 +5,11 @@ import { CalendarRange, MapPin, Star } from 'lucide-react'
 import FavoriteButton from '@/components/FavoriteButton'
 import PlaceCard from '@/components/PlaceCard'
 import WeatherCard from '@/components/WeatherCard'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { fetchDestination } from '@/services/destinationsService'
 import { fetchPlaces } from '@/services/placesService'
 import { getLocalizedDescription, getLocalizedName } from '@/utils/localization'
+import { destinationTitle } from '@/utils/seo'
 import type { Destination, Place } from '@/types'
 
 function DestinationDetailPage() {
@@ -41,6 +43,8 @@ function DestinationDetailPage() {
       cancelled = true
     }
   }, [id])
+
+  useDocumentTitle(destination ? destinationTitle(destination.name, destination.country) : undefined)
 
   if (isLoading) {
     return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">{t('common.loading')}</div>

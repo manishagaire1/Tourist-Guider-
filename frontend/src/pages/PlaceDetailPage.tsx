@@ -6,10 +6,13 @@ import AddToTripButton from '@/components/AddToTripButton'
 import FavoriteButton from '@/components/FavoriteButton'
 import PlaceCard from '@/components/PlaceCard'
 import StarRatingInput from '@/components/StarRatingInput'
+import ToursAndActivities from '@/components/ToursAndActivities'
 import { useAuth } from '@/hooks/useAuth'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { fetchPlace, fetchPlaces } from '@/services/placesService'
 import { createReview, deleteReview, fetchReviews, updateReview } from '@/services/reviewsService'
 import { getLocalizedDescription, getLocalizedName } from '@/utils/localization'
+import { placeTitle } from '@/utils/seo'
 import type { Place, Review } from '@/types'
 
 function PlaceDetailPage() {
@@ -97,6 +100,8 @@ function PlaceDetailPage() {
     await deleteReview(myReview.id)
     setReviews((prev) => prev.filter((r) => r.id !== myReview.id))
   }
+
+  useDocumentTitle(place ? placeTitle(place.name, place.destination_name) : undefined)
 
   if (isLoading) {
     return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">{t('common.loading')}</div>
@@ -196,6 +201,8 @@ function PlaceDetailPage() {
             </a>
           )}
         </div>
+
+        <ToursAndActivities placeId={place.id} />
 
         <section className="border-t border-neutral-200 py-8">
           <h2 className="mb-4 text-xl font-semibold text-neutral-900">{t('placeDetail.reviews')}</h2>

@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { Search, SlidersHorizontal } from 'lucide-react'
 import PlaceCard from '@/components/PlaceCard'
 import PlaceCardSkeleton from '@/components/PlaceCardSkeleton'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { fetchDestinations } from '@/services/destinationsService'
 import { fetchCategories, fetchPlaces } from '@/services/placesService'
 import { getLocalizedName } from '@/utils/localization'
 import { addRecentSearch, getRecentSearches } from '@/utils/recentSearches'
+import { siteTitle } from '@/utils/seo'
 import type { Category, Destination, Place } from '@/types'
 
 const PRICE_RANGES = ['$', '$$', '$$$', '$$$$']
@@ -16,6 +18,7 @@ const POPULAR_SEARCHES = ['Tokyo', 'Temples', 'Museums', 'Beaches', 'Nightlife',
 
 function ExplorePage() {
   const { t, i18n } = useTranslation()
+  useDocumentTitle(siteTitle('Explore Places'))
   const [searchParams, setSearchParams] = useSearchParams()
   const [categories, setCategories] = useState<Category[]>([])
   const [destinations, setDestinations] = useState<Destination[]>([])

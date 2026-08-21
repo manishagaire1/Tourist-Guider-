@@ -39,7 +39,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class TravelPreferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TravelPreference
-        fields = ['interests', 'updated_at']
+        fields = ['interests', 'preferred_currency', 'updated_at']
         read_only_fields = ['updated_at']
 
     def validate_interests(self, value):
@@ -48,6 +48,11 @@ class TravelPreferenceSerializer(serializers.ModelSerializer):
         if invalid:
             raise serializers.ValidationError(f'Invalid interests: {sorted(invalid)}')
         return value
+
+    def validate_preferred_currency(self, value):
+        if value and len(value) != 3:
+            raise serializers.ValidationError('Currency must be a 3-letter ISO 4217 code.')
+        return value.upper()
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

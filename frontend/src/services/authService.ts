@@ -46,7 +46,9 @@ export async function fetchTravelPreferences(): Promise<TravelPreference> {
   return data
 }
 
-export async function updateTravelPreferences(interests: string[]): Promise<TravelPreference> {
-  const { data } = await apiClient.patch<TravelPreference>('/auth/profile/preferences/', { interests })
+export async function updateTravelPreferences(
+  payload: { interests?: string[]; preferred_currency?: string },
+): Promise<TravelPreference> {
+  const { data } = await apiClient.patch<TravelPreference>('/auth/profile/preferences/', payload)
   return data
 }

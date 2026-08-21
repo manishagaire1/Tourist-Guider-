@@ -273,6 +273,41 @@
     "travelTips": "旅のヒント",
     "copyright": "© {{year}} Tourist Guide. フルスタック・ポートフォリオ・プロジェクトとして制作。"
   },
+  "tours": {
+    "title": "ツアー＆アクティビティ",
+    "fromPrice": "{{price}}〜",
+    "viewAvailability": "空き状況を見る",
+    "checkAvailability": "空き状況を確認",
+    "checking": "確認中…",
+    "continueToViator": "Viatorで続ける",
+    "error": "現在、空き状況を取得できませんでした。しばらくしてからもう一度お試しください。",
+    "status": {
+      "available": "予約可能",
+      "limited": "残りわずか",
+      "sold_out": "満席",
+      "unavailable": "予約不可"
+    }
+  },
+  "currency": {
+    "usd": "USD — 米ドル",
+    "jpy": "JPY — 日本円",
+    "eur": "EUR — ユーロ",
+    "gbp": "GBP — 英ポンド",
+    "aud": "AUD — 豪ドル",
+    "cad": "CAD — カナダドル",
+    "npr": "NPR — ネパールルピー",
+    "inr": "INR — インドルピー",
+    "budgetCurrency": "予算の通貨",
+    "rateLine": "1 USD = {{rate}} {{currency}}",
+    "updatedJustNow": "たった今更新",
+    "updatedMinutesAgo_one": "{{count}}分前に更新",
+    "updatedMinutesAgo_other": "{{count}}分前に更新",
+    "updatedHoursAgo_one": "{{count}}時間前に更新",
+    "updatedHoursAgo_other": "{{count}}時間前に更新",
+    "usingCachedRate": "キャッシュされたレートを使用しています。",
+    "unavailable": "現在、リアルタイムの為替レートを利用できません。",
+    "continuingInUsd": "米ドルのまま続行します。"
+  },
   "interests": {
     "nature": "自然",
     "history": "歴史",

@@ -4,12 +4,15 @@ import { useTranslation } from 'react-i18next'
 import { Map as MapIcon, Search } from 'lucide-react'
 import DestinationCard from '@/components/DestinationCard'
 import DestinationCardSkeleton from '@/components/DestinationCardSkeleton'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { fetchDestinations } from '@/services/destinationsService'
 import { addRecentSearch } from '@/utils/recentSearches'
+import { siteTitle } from '@/utils/seo'
 import type { Destination } from '@/types'
 
 function HomePage() {
   const { t } = useTranslation()
+  useDocumentTitle(siteTitle())
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [destinations, setDestinations] = useState<Destination[]>([])

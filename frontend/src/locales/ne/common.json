@@ -273,6 +273,41 @@
     "travelTips": "यात्रा सुझावहरू",
     "copyright": "© {{year}} Tourist Guide। फुल-स्ट्याक पोर्टफोलियो प्रोजेक्टको रूपमा निर्मित।"
   },
+  "tours": {
+    "title": "भ्रमण र गतिविधिहरू",
+    "fromPrice": "{{price}} देखि",
+    "viewAvailability": "उपलब्धता हेर्नुहोस्",
+    "checkAvailability": "उपलब्धता जाँच गर्नुहोस्",
+    "checking": "जाँच गर्दै…",
+    "continueToViator": "Viator मा जारी राख्नुहोस्",
+    "error": "अहिले उपलब्धता प्राप्त गर्न सकिएन। कृपया पछि फेरि प्रयास गर्नुहोस्।",
+    "status": {
+      "available": "उपलब्ध",
+      "limited": "सीमित उपलब्धता",
+      "sold_out": "बिक्री सकियो",
+      "unavailable": "उपलब्ध छैन"
+    }
+  },
+  "currency": {
+    "usd": "USD — अमेरिकी डलर",
+    "jpy": "JPY — जापानी येन",
+    "eur": "EUR — युरो",
+    "gbp": "GBP — बेलायती पाउन्ड",
+    "aud": "AUD — अष्ट्रेलियाली डलर",
+    "cad": "CAD — क्यानाडाली डलर",
+    "npr": "NPR — नेपाली रुपैयाँ",
+    "inr": "INR — भारतीय रुपैयाँ",
+    "budgetCurrency": "बजेट मुद्रा",
+    "rateLine": "1 USD = {{rate}} {{currency}}",
+    "updatedJustNow": "भर्खरै अद्यावधिक भयो",
+    "updatedMinutesAgo_one": "{{count}} मिनेट अगाडि अद्यावधिक भयो",
+    "updatedMinutesAgo_other": "{{count}} मिनेट अगाडि अद्यावधिक भयो",
+    "updatedHoursAgo_one": "{{count}} घण्टा अगाडि अद्यावधिक भयो",
+    "updatedHoursAgo_other": "{{count}} घण्टा अगाडि अद्यावधिक भयो",
+    "usingCachedRate": "क्यास गरिएको दर प्रयोग गरिँदैछ।",
+    "unavailable": "लाइभ विनिमय दरहरू अस्थायी रूपमा उपलब्ध छैनन्।",
+    "continuingInUsd": "USD मा नै जारी राखिँदैछ।"
+  },
   "interests": {
     "nature": "प्रकृति",
     "history": "इतिहास",

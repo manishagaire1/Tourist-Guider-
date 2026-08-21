@@ -14,6 +14,8 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { TRAVEL_TIPS } from '@/data/travelTips'
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'
+import { siteTitle } from '@/utils/seo'
 
 const ICONS: Record<string, LucideIcon> = {
   'shield-check': ShieldCheck,
@@ -30,6 +32,7 @@ const ICONS: Record<string, LucideIcon> = {
 
 function TravelTipsPage() {
   const { t } = useTranslation()
+  useDocumentTitle(siteTitle('Travel Tips'))
   return (
     <main className="mx-auto max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8">

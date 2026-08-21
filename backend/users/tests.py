@@ -91,3 +91,17 @@ class TravelPreferenceTests(APITestCase):
     def test_update_with_invalid_interest_rejected(self):
         response = self.client.patch('/api/auth/profile/preferences/', {'interests': ['not-a-real-interest']}, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_preferred_currency(self):
+        response = self.client.patch('/api/auth/profile/preferences/', {'preferred_currency': 'jpy'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['preferred_currency'], 'JPY')
+
+    def test_preferred_currency_is_optional(self):
+        response = self.client.patch('/api/auth/profile/preferences/', {'interests': ['food']}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['preferred_currency'], '')
+
+    def test_invalid_preferred_currency_length_rejected(self):
+        response = self.client.patch('/api/auth/profile/preferences/', {'preferred_currency': 'JAPAN'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

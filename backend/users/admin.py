@@ -13,4 +13,4 @@ class UserAdmin(DjangoUserAdmin):
 
 @admin.register(TravelPreference)
 class TravelPreferenceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'interests', 'updated_at')
+    list_display = ('user', 'interests', 'preferred_currency', 'updated_at')
