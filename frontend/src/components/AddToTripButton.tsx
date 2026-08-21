@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { CalendarPlus, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { addItineraryItem, fetchTrips } from '@/services/tripsService'
 import type { Trip } from '@/types'
 
 function AddToTripButton({ placeId }: { placeId: number }) {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
@@ -46,25 +48,25 @@ function AddToTripButton({ placeId }: { placeId: number }) {
         className="flex items-center gap-2 rounded-pill border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 transition hover:border-accent-500 hover:text-accent-600"
       >
         <CalendarPlus className="size-4" />
-        Add to My Trip
+        {t('placeDetail.addToTrip')}
       </button>
 
       {isOpen && (
         <div className="absolute right-0 top-full z-20 mt-2 w-72 rounded-card border border-neutral-200 bg-white p-4 shadow-card-hover">
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-neutral-900">Add to trip</h3>
-            <button onClick={() => setIsOpen(false)} aria-label="Close">
+            <h3 className="text-sm font-semibold text-neutral-900">{t('addToTrip.title')}</h3>
+            <button onClick={() => setIsOpen(false)} aria-label={t('common.close')}>
               <X className="size-4 text-neutral-400" />
             </button>
           </div>
 
-          {isLoading && <p className="text-sm text-neutral-500">Loading your trips…</p>}
+          {isLoading && <p className="text-sm text-neutral-500">{t('addToTrip.loadingTrips')}</p>}
 
           {!isLoading && trips.length === 0 && (
             <p className="text-sm text-neutral-500">
-              You don't have any trips yet.{' '}
+              {t('addToTrip.noTrips')}{' '}
               <Link to="/trips" className="font-medium text-accent-600 hover:underline">
-                Create one
+                {t('addToTrip.createOne')}
               </Link>
               .
             </p>
@@ -73,7 +75,7 @@ function AddToTripButton({ placeId }: { placeId: number }) {
           {!isLoading && trips.length > 0 && status !== 'saved' && (
             <div className="flex flex-col gap-3">
               <label className="flex flex-col gap-1 text-xs font-medium text-neutral-600">
-                Trip
+                {t('addToTrip.trip')}
                 <select
                   value={selectedTripId ?? ''}
                   onChange={(event) => setSelectedTripId(Number(event.target.value))}
@@ -87,7 +89,7 @@ function AddToTripButton({ placeId }: { placeId: number }) {
                 </select>
               </label>
               <label className="flex flex-col gap-1 text-xs font-medium text-neutral-600">
-                Day
+                {t('addToTrip.day')}
                 <input
                   type="number"
                   min={1}
@@ -101,12 +103,12 @@ function AddToTripButton({ placeId }: { placeId: number }) {
                 disabled={status === 'saving'}
                 className="rounded-pill bg-accent-500 py-2 text-sm font-medium text-white transition hover:bg-accent-600 disabled:opacity-60"
               >
-                {status === 'saving' ? 'Adding…' : 'Add to Itinerary'}
+                {status === 'saving' ? t('addToTrip.adding') : t('addToTrip.addToItinerary')}
               </button>
             </div>
           )}
 
-          {status === 'saved' && <p className="text-sm text-primary-700">Added to your trip.</p>}
+          {status === 'saved' && <p className="text-sm text-primary-700">{t('addToTrip.added')}</p>}
         </div>
       )}
     </div>

@@ -18,6 +18,13 @@ export interface LoginResponse extends AuthTokens {
   user: User
 }
 
+export interface LocalizedFields {
+  name?: string
+  description?: string
+}
+
+export type Translations = Record<string, LocalizedFields>
+
 export interface Destination {
   id: number
   name: string
@@ -33,6 +40,7 @@ export interface Destination {
   latitude: string | null
   longitude: string | null
   places_count: number
+  translations: Translations
   created_at: string
 }
 
@@ -41,6 +49,7 @@ export interface Category {
   name: string
   slug: string
   icon: string
+  translations: Translations
 }
 
 export interface Place {
@@ -62,6 +71,7 @@ export interface Place {
   image_source: string
   image_source_url: string
   image_credit: string
+  translations: Translations
   average_rating: number | null
   review_count: number
   created_at: string

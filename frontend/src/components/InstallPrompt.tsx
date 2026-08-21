@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Download, X } from 'lucide-react'
 
 interface BeforeInstallPromptEvent extends Event {
@@ -7,6 +8,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 function InstallPrompt() {
+  const { t } = useTranslation()
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [isDismissed, setIsDismissed] = useState(false)
 
@@ -35,8 +37,8 @@ function InstallPrompt() {
           <Download className="size-5" />
         </span>
         <div>
-          <p className="text-sm font-medium text-neutral-900">Install Tourist Guide</p>
-          <p className="text-xs text-neutral-500">Add to your home screen for quick access.</p>
+          <p className="text-sm font-medium text-neutral-900">{t('pwa.installTitle')}</p>
+          <p className="text-xs text-neutral-500">{t('pwa.installSubtitle')}</p>
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-1">
@@ -44,11 +46,11 @@ function InstallPrompt() {
           onClick={handleInstall}
           className="rounded-pill bg-accent-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-accent-600"
         >
-          Install
+          {t('pwa.install')}
         </button>
         <button
           onClick={() => setIsDismissed(true)}
-          aria-label="Dismiss"
+          aria-label={t('common.dismiss')}
           className="p-1.5 text-neutral-400 hover:text-neutral-600"
         >
           <X className="size-4" />

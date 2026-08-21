@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { CalendarRange, CloudOff, MapPin, Plus, Trash2 } from 'lucide-react'
 import { fetchDestinations } from '@/services/destinationsService'
 import { getAllOfflineTrips } from '@/services/offlineDb'
 import { createTrip, deleteTrip, fetchTrips } from '@/services/tripsService'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
+import { getLocalizedName } from '@/utils/localization'
 import type { Destination, Trip } from '@/types'
 
 function TripsPage() {
+  const { t, i18n } = useTranslation()
   const { isOnline, isSyncing } = useOnlineStatus()
   const wasSyncing = useRef(isSyncing)
   const [trips, setTrips] = useState<Trip[]>([])
@@ -72,7 +75,7 @@ function TripsPage() {
       setForm({ name: '', destination: '', start_date: '', end_date: '' })
       setIsFormOpen(false)
     } catch {
-      setError('Please check your trip details and try again.')
+      setError(t('trips.createError'))
     }
   }
 
@@ -83,31 +86,31 @@ function TripsPage() {
   }
 
   if (isLoading) {
-    return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">Loading…</div>
+    return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">{t('common.loading')}</div>
   }
 
   return (
     <main className="mx-auto max-w-5xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-neutral-900">My Trips</h1>
-          <p className="mt-1 text-neutral-500">Plan your itineraries, day by day.</p>
+          <h1 className="text-2xl font-semibold text-neutral-900">{t('trips.title')}</h1>
+          <p className="mt-1 text-neutral-500">{t('trips.subtitle')}</p>
         </div>
         <button
           onClick={() => setIsFormOpen((open) => !open)}
           disabled={!isOnline}
-          title={isOnline ? undefined : 'Creating a trip requires an internet connection'}
+          title={isOnline ? undefined : t('trips.creatingRequiresInternet')}
           className="flex items-center gap-2 rounded-pill bg-accent-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Plus className="size-4" />
-          New Trip
+          {t('trips.newTrip')}
         </button>
       </div>
 
       {isShowingOfflineData && (
         <div className="mb-6 flex items-center gap-2 rounded-card border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-600">
           <CloudOff className="size-4 shrink-0" />
-          You're offline — showing trips saved for offline access.
+          {t('trips.offlineShowingSaved')}
         </div>
       )}
 
@@ -115,33 +118,33 @@ function TripsPage() {
         <form onSubmit={handleCreate} className="mb-8 flex flex-col gap-4 rounded-card border border-neutral-200 bg-white p-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-              Trip name
+              {t('trips.tripName')}
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
-                placeholder="Tokyo Trip"
+                placeholder={t('trips.tripNamePlaceholder')}
                 className="rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-primary-400"
               />
             </label>
             <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-              Destination
+              {t('trips.destination')}
               <select
                 value={form.destination}
                 onChange={(event) => setForm((prev) => ({ ...prev, destination: event.target.value }))}
                 className="rounded-lg border border-neutral-200 px-3 py-2 text-sm"
               >
-                <option value="">None</option>
+                <option value="">{t('trips.none')}</option>
                 {destinations.map((destination) => (
                   <option key={destination.id} value={destination.id}>
-                    {destination.name}
+                    {getLocalizedName(destination, i18n.language)}
                   </option>
                 ))}
               </select>
             </label>
             <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-              Start date
+              {t('trips.startDate')}
               <input
                 type="date"
                 required
@@ -151,7 +154,7 @@ function TripsPage() {
               />
             </label>
             <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-              End date
+              {t('trips.endDate')}
               <input
                 type="date"
                 required
@@ -166,14 +169,14 @@ function TripsPage() {
             type="submit"
             className="self-start rounded-pill bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-700"
           >
-            Create Trip
+            {t('trips.createTrip')}
           </button>
         </form>
       )}
 
       {trips.length === 0 ? (
         <div className="rounded-card border border-neutral-200 bg-white px-6 py-16 text-center text-neutral-500">
-          You haven't planned any trips yet.
+          {t('trips.noTrips')}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -189,8 +192,8 @@ function TripsPage() {
                 <button
                   onClick={() => handleDelete(trip.id)}
                   disabled={!isOnline}
-                  aria-label="Delete trip"
-                  title={isOnline ? undefined : 'Deleting a trip requires an internet connection'}
+                  aria-label={t('trips.deleteTrip')}
+                  title={isOnline ? undefined : t('trips.deletingRequiresInternet')}
                   className="text-neutral-400 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Trash2 className="size-4" />
@@ -207,11 +210,13 @@ function TripsPage() {
                 {trip.start_date} – {trip.end_date}
               </p>
               <div className="flex items-center justify-between">
-                <p className="text-xs text-neutral-400">{trip.itinerary_items.length} itinerary items</p>
+                <p className="text-xs text-neutral-400">
+                  {t('trips.itineraryItems', { count: trip.itinerary_items.length })}
+                </p>
                 {offlineTripIds.has(trip.id) && (
                   <span className="flex items-center gap-1 text-xs font-medium text-primary-600">
                     <CloudOff className="size-3.5" />
-                    Available offline
+                    {t('trips.availableOffline')}
                   </span>
                 )}
               </div>

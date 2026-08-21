@@ -6,7 +6,7 @@ from .models import Category, Place
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'icon']
+        fields = ['id', 'name', 'slug', 'icon', 'translations']
 
 
 class PlaceSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class PlaceSerializer(serializers.ModelSerializer):
             'id', 'destination', 'destination_name', 'category', 'category_id', 'name',
             'description', 'address', 'latitude', 'longitude', 'rating', 'price_range',
             'opening_hours', 'phone', 'website', 'image_url', 'image_source', 'image_source_url',
-            'image_credit', 'average_rating', 'review_count', 'created_at',
+            'image_credit', 'translations', 'average_rating', 'review_count', 'created_at',
         ]
         read_only_fields = ['id', 'created_at']
 

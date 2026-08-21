@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   ArrowDown,
   ArrowUp,
@@ -27,12 +28,13 @@ import {
   updateItineraryItem,
   updateTrip,
 } from '@/services/tripsService'
+import { getLocalizedName } from '@/utils/localization'
 import type { ItineraryItem, Place, Trip } from '@/types'
 
-function dateForDay(startDate: string, dayNumber: number): string {
+function dateForDay(startDate: string, dayNumber: number, locale: string): string {
   const date = new Date(startDate + 'T00:00:00')
   date.setDate(date.getDate() + (dayNumber - 1))
-  return date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+  return date.toLocaleDateString(locale, { weekday: 'short', month: 'short', day: 'numeric' })
 }
 
 function dayCount(startDate: string, endDate: string): number {
@@ -42,6 +44,7 @@ function dayCount(startDate: string, endDate: string): number {
 }
 
 function TripDetailPage() {
+  const { t, i18n } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { isOnline, isSyncing } = useOnlineStatus()
@@ -117,14 +120,14 @@ function TripDetailPage() {
   }, [isSyncing])
 
   if (isLoading) {
-    return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">Loading…</div>
+    return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">{t('common.loading')}</div>
   }
 
   if (!trip) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-2 py-24 text-center text-neutral-500">
-        <p>This trip isn't available offline.</p>
-        <p className="text-sm">Connect to the internet to view it.</p>
+        <p>{t('trips.tripNotAvailableOffline')}</p>
+        <p className="text-sm">{t('trips.connectToView')}</p>
       </div>
     )
   }
@@ -231,7 +234,7 @@ function TripDetailPage() {
       {isShowingOfflineData && (
         <div className="mb-6 flex items-center gap-2 rounded-card border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-600">
           <CloudOff className="size-4 shrink-0" />
-          You're offline — showing your saved copy of this trip.
+          {t('trips.offlineShowingSavedTrip')}
         </div>
       )}
 
@@ -250,23 +253,23 @@ function TripDetailPage() {
             }`}
           >
             <CloudDownload className="size-4" />
-            {isSavedOffline ? 'Available Offline' : 'Save for Offline'}
+            {isSavedOffline ? t('trips.availableOfflineButton') : t('trips.saveForOffline')}
           </button>
           <Link
             to="/budget-calculator"
             className="flex items-center gap-1.5 rounded-pill border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 hover:border-accent-500 hover:text-accent-600"
           >
             <Calculator className="size-4" />
-            Estimate Budget
+            {t('trips.estimateBudget')}
           </Link>
           <button
             onClick={handleDeleteTrip}
             disabled={!isOnline}
-            title={isOnline ? undefined : 'Deleting a trip requires an internet connection'}
+            title={isOnline ? undefined : t('trips.deletingRequiresInternet')}
             className="flex items-center gap-1.5 rounded-pill border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 hover:border-red-300 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Trash2 className="size-4" />
-            Delete Trip
+            {t('trips.deleteTrip')}
           </button>
         </div>
       </div>
@@ -279,7 +282,7 @@ function TripDetailPage() {
           onChange={(event) => handleDateChange('start_date', event.target.value)}
           className="rounded-lg border border-neutral-200 px-2 py-1 text-sm"
         />
-        <span className="text-neutral-400">to</span>
+        <span className="text-neutral-400">{t('trips.to')}</span>
         <input
           type="date"
           value={trip.end_date}
@@ -298,13 +301,13 @@ function TripDetailPage() {
                   {day}
                 </span>
                 <div>
-                  <h2 className="font-semibold text-neutral-900">Day {day}</h2>
-                  <p className="text-xs text-neutral-400">{dateForDay(trip.start_date, day)}</p>
+                  <h2 className="font-semibold text-neutral-900">{t('trips.day', { number: day })}</h2>
+                  <p className="text-xs text-neutral-400">{dateForDay(trip.start_date, day, i18n.language)}</p>
                 </div>
               </div>
 
               <div className="ml-4 flex flex-col gap-3 border-l-2 border-neutral-200 pl-6">
-                {items.length === 0 && <p className="text-sm text-neutral-400">No places added yet.</p>}
+                {items.length === 0 && <p className="text-sm text-neutral-400">{t('trips.noPlacesAddedYet')}</p>}
                 {items.map((item, index) => (
                   <div
                     key={item.id}
@@ -312,13 +315,17 @@ function TripDetailPage() {
                   >
                     <img
                       src={item.place_detail.image_url}
-                      alt={item.place_detail.name}
+                      alt={getLocalizedName(item.place_detail, i18n.language)}
                       className="size-14 shrink-0 rounded-lg object-cover"
                     />
                     <div className="min-w-0 flex-1">
                       {item.time && <p className="text-xs font-medium text-accent-600">{item.time}</p>}
-                      <p className="truncate font-medium text-neutral-900">{item.place_detail.name}</p>
-                      <p className="truncate text-xs text-neutral-500">{item.place_detail.category.name}</p>
+                      <p className="truncate font-medium text-neutral-900">
+                        {getLocalizedName(item.place_detail, i18n.language)}
+                      </p>
+                      <p className="truncate text-xs text-neutral-500">
+                        {getLocalizedName(item.place_detail.category, i18n.language)}
+                      </p>
                       {item.place_detail.address && (
                         <p className="truncate text-xs text-neutral-400">{item.place_detail.address}</p>
                       )}
@@ -328,7 +335,7 @@ function TripDetailPage() {
                         onClick={() => handleMove(day, index, -1)}
                         disabled={index === 0}
                         className="rounded p-1 text-neutral-400 hover:text-neutral-700 disabled:opacity-30"
-                        aria-label="Move up"
+                        aria-label={t('trips.moveUp')}
                       >
                         <ArrowUp className="size-4" />
                       </button>
@@ -336,7 +343,7 @@ function TripDetailPage() {
                         onClick={() => handleMove(day, index, 1)}
                         disabled={index === items.length - 1}
                         className="rounded p-1 text-neutral-400 hover:text-neutral-700 disabled:opacity-30"
-                        aria-label="Move down"
+                        aria-label={t('trips.moveDown')}
                       >
                         <ArrowDown className="size-4" />
                       </button>
@@ -344,7 +351,7 @@ function TripDetailPage() {
                     <button
                       onClick={() => handleRemoveItem(item.id)}
                       className="shrink-0 text-neutral-400 hover:text-red-600"
-                      aria-label="Remove"
+                      aria-label={t('trips.removeItem')}
                     >
                       <Trash2 className="size-4" />
                     </button>
@@ -352,7 +359,7 @@ function TripDetailPage() {
                 ))}
 
                 {!isOnline ? (
-                  <p className="text-xs text-neutral-400">Adding places requires an internet connection.</p>
+                  <p className="text-xs text-neutral-400">{t('trips.addingRequiresInternet')}</p>
                 ) : addForm?.day === day ? (
                   <div className="flex flex-wrap items-center gap-2 rounded-card border border-dashed border-neutral-300 p-3">
                     <select
@@ -360,10 +367,10 @@ function TripDetailPage() {
                       onChange={(event) => setAddForm({ ...addForm, place: event.target.value })}
                       className="rounded-lg border border-neutral-200 px-2 py-1.5 text-sm"
                     >
-                      <option value="">Select a place…</option>
+                      <option value="">{t('trips.selectPlace')}</option>
                       {availablePlaces.map((place) => (
                         <option key={place.id} value={place.id}>
-                          {place.name}
+                          {getLocalizedName(place, i18n.language)}
                         </option>
                       ))}
                     </select>
@@ -377,13 +384,13 @@ function TripDetailPage() {
                       onClick={() => handleAddPlace(day)}
                       className="rounded-pill bg-accent-500 px-4 py-1.5 text-sm font-medium text-white hover:bg-accent-600"
                     >
-                      Add
+                      {t('common.add')}
                     </button>
                     <button
                       onClick={() => setAddForm(null)}
                       className="text-sm text-neutral-500 hover:text-neutral-700"
                     >
-                      Cancel
+                      {t('trips.cancel')}
                     </button>
                   </div>
                 ) : (
@@ -392,7 +399,7 @@ function TripDetailPage() {
                     className="flex w-fit items-center gap-1.5 rounded-pill border border-dashed border-neutral-300 px-4 py-2 text-sm text-neutral-500 hover:border-accent-500 hover:text-accent-600"
                   >
                     <Plus className="size-4" />
-                    Add a place
+                    {t('trips.addPlace')}
                   </button>
                 )}
               </div>

@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next'
 import { AlertTriangle, WifiOff, X } from 'lucide-react'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 
 function OfflineBanner() {
+  const { t } = useTranslation()
   const { isOnline, syncError, dismissSyncError } = useOnlineStatus()
 
   if (isOnline && !syncError) return null
@@ -13,7 +15,7 @@ function OfflineBanner() {
           <AlertTriangle className="size-4 shrink-0" />
           {syncError}
         </span>
-        <button onClick={dismissSyncError} aria-label="Dismiss" className="shrink-0 text-accent-800/70 hover:text-accent-800">
+        <button onClick={dismissSyncError} aria-label={t('common.dismiss')} className="shrink-0 text-accent-800/70 hover:text-accent-800">
           <X className="size-4" />
         </button>
       </div>
@@ -23,7 +25,7 @@ function OfflineBanner() {
   return (
     <div className="flex items-center justify-center gap-2 bg-neutral-800 px-4 py-2 text-center text-sm text-white">
       <WifiOff className="size-4 shrink-0" />
-      You're offline. Your saved trips are still available.
+      {t('pwa.offlineBanner')}
     </div>
   )
 }

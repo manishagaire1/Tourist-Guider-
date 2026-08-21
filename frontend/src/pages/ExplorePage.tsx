@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Search, SlidersHorizontal } from 'lucide-react'
 import PlaceCard from '@/components/PlaceCard'
 import PlaceCardSkeleton from '@/components/PlaceCardSkeleton'
 import { fetchDestinations } from '@/services/destinationsService'
 import { fetchCategories, fetchPlaces } from '@/services/placesService'
+import { getLocalizedName } from '@/utils/localization'
 import { addRecentSearch, getRecentSearches } from '@/utils/recentSearches'
 import type { Category, Destination, Place } from '@/types'
 
@@ -13,6 +15,7 @@ const RATINGS = [4.5, 4, 3.5, 3]
 const POPULAR_SEARCHES = ['Tokyo', 'Temples', 'Museums', 'Beaches', 'Nightlife', 'Shopping']
 
 function ExplorePage() {
+  const { t, i18n } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [categories, setCategories] = useState<Category[]>([])
   const [destinations, setDestinations] = useState<Destination[]>([])
@@ -65,7 +68,7 @@ function ExplorePage() {
           if (!cancelled) setPlaces(data)
         })
         .catch(() => {
-          if (!cancelled) setError('Something went wrong. Please try again.')
+          if (!cancelled) setError(t('common.somethingWentWrong'))
         })
         .finally(() => {
           if (!cancelled) setIsLoading(false)
@@ -81,8 +84,8 @@ function ExplorePage() {
   return (
     <main className="mx-auto max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-neutral-900">Explore Places</h1>
-        <p className="mt-1 text-neutral-500">Search attractions, restaurants, hotels, and more.</p>
+        <h1 className="text-2xl font-semibold text-neutral-900">{t('explore.title')}</h1>
+        <p className="mt-1 text-neutral-500">{t('explore.subtitle')}</p>
       </div>
 
       <div className="mb-6 flex items-center gap-2 rounded-pill border border-neutral-200 bg-white px-4 py-2.5 shadow-card">
@@ -91,14 +94,16 @@ function ExplorePage() {
           type="text"
           value={query}
           onChange={(event) => updateParam('q', event.target.value)}
-          placeholder="Search places, restaurants, hotels…"
+          placeholder={t('explore.searchPlaceholder')}
           className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
         />
       </div>
 
       {!query && (
         <div className="mb-6 flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-neutral-500">{recentSearches.length > 0 ? 'Recent searches:' : 'Popular searches:'}</span>
+          <span className="text-neutral-500">
+            {recentSearches.length > 0 ? t('explore.recentSearches') : t('explore.popularSearches')}
+          </span>
           {(recentSearches.length > 0 ? recentSearches : POPULAR_SEARCHES).map((term) => (
             <button
               key={term}
@@ -114,7 +119,7 @@ function ExplorePage() {
       <div className="mb-8 flex flex-wrap items-center gap-3 text-sm">
         <span className="flex items-center gap-1.5 text-neutral-500">
           <SlidersHorizontal className="size-4" />
-          Filters:
+          {t('explore.filters')}
         </span>
 
         <select
@@ -122,10 +127,10 @@ function ExplorePage() {
           onChange={(event) => updateParam('category', event.target.value)}
           className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-neutral-700"
         >
-          <option value="">All categories</option>
+          <option value="">{t('explore.allCategories')}</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
-              {category.name}
+              {getLocalizedName(category, i18n.language)}
             </option>
           ))}
         </select>
@@ -135,10 +140,10 @@ function ExplorePage() {
           onChange={(event) => updateParam('destination', event.target.value)}
           className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-neutral-700"
         >
-          <option value="">All destinations</option>
+          <option value="">{t('explore.allDestinations')}</option>
           {destinations.map((destination) => (
             <option key={destination.id} value={destination.id}>
-              {destination.name}
+              {getLocalizedName(destination, i18n.language)}
             </option>
           ))}
         </select>
@@ -148,7 +153,7 @@ function ExplorePage() {
           onChange={(event) => updateParam('price', event.target.value)}
           className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-neutral-700"
         >
-          <option value="">Any price</option>
+          <option value="">{t('explore.anyPrice')}</option>
           {PRICE_RANGES.map((price) => (
             <option key={price} value={price}>
               {price}
@@ -161,10 +166,10 @@ function ExplorePage() {
           onChange={(event) => updateParam('min_rating', event.target.value)}
           className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-neutral-700"
         >
-          <option value="">Any rating</option>
+          <option value="">{t('explore.anyRating')}</option>
           {RATINGS.map((rating) => (
             <option key={rating} value={rating}>
-              {rating}+ stars
+              {t('explore.starsAndUp', { count: rating })}
             </option>
           ))}
         </select>
@@ -186,7 +191,7 @@ function ExplorePage() {
 
       {!isLoading && !error && places.length === 0 && (
         <div className="rounded-card border border-neutral-200 bg-white px-6 py-12 text-center text-neutral-500">
-          Sorry, we couldn't find any places matching your search.
+          {t('explore.noResults')}
         </div>
       )}
     </main>

@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Map as MapIcon, Search } from 'lucide-react'
 import DestinationCard from '@/components/DestinationCard'
 import DestinationCardSkeleton from '@/components/DestinationCardSkeleton'
@@ -8,6 +9,7 @@ import { addRecentSearch } from '@/utils/recentSearches'
 import type { Destination } from '@/types'
 
 function HomePage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [destinations, setDestinations] = useState<Destination[]>([])
@@ -24,7 +26,7 @@ function HomePage() {
         if (!cancelled) setDestinations(data)
       })
       .catch(() => {
-        if (!cancelled) setError('Something went wrong. Please try again.')
+        if (!cancelled) setError(t('common.somethingWentWrong'))
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false)
@@ -53,12 +55,8 @@ function HomePage() {
         <div className="absolute inset-0 bg-linear-to-t from-primary-950 via-primary-950/70 to-primary-900/40" />
 
         <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 py-28 text-center sm:px-6 sm:py-36">
-          <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-            Explore the World. Create Unforgettable Journeys.
-          </h1>
-          <p className="max-w-xl text-primary-100">
-            Discover amazing destinations, hidden gems, local experiences, and everything you need for your next adventure.
-          </p>
+          <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">{t('home.heroTitle')}</h1>
+          <p className="max-w-xl text-primary-100">{t('home.heroSubtitle')}</p>
 
           <form
             onSubmit={handleSearch}
@@ -69,14 +67,14 @@ function HomePage() {
               type="text"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Where do you want to go?"
+              placeholder={t('home.searchPlaceholder')}
               className="w-full bg-transparent py-2 text-sm text-neutral-800 outline-none placeholder:text-neutral-400"
             />
             <button
               type="submit"
               className="shrink-0 rounded-pill bg-accent-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-600"
             >
-              Search
+              {t('home.search')}
             </button>
           </form>
 
@@ -85,14 +83,14 @@ function HomePage() {
               onClick={() => navigate('/explore')}
               className="rounded-pill bg-white px-6 py-3 text-sm font-medium text-neutral-900 shadow-card transition hover:shadow-card-hover"
             >
-              Explore Now
+              {t('home.exploreNow')}
             </button>
             <button
               onClick={() => navigate('/map')}
               className="flex items-center gap-2 rounded-pill border border-white/30 px-6 py-3 text-sm font-medium text-white transition hover:bg-white/10"
             >
               <MapIcon className="size-4" />
-              View Map
+              {t('home.viewMap')}
             </button>
           </div>
         </div>
@@ -101,8 +99,8 @@ function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-neutral-900">Popular Destinations</h2>
-            <p className="mt-1 text-neutral-500">Hand-picked places travelers love right now.</p>
+            <h2 className="text-2xl font-semibold text-neutral-900">{t('home.popularDestinations')}</h2>
+            <p className="mt-1 text-neutral-500">{t('home.popularDestinationsSubtitle')}</p>
           </div>
         </div>
 
@@ -124,7 +122,7 @@ function HomePage() {
 
         {!isLoading && !error && destinations.length === 0 && (
           <div className="rounded-card border border-neutral-200 bg-white px-6 py-12 text-center text-neutral-500">
-            No destinations yet — check back soon.
+            {t('home.noDestinations')}
           </div>
         )}
       </section>

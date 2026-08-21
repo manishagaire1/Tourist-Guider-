@@ -18,6 +18,23 @@ CATEGORIES = [
     ('Nightlife', 'martini'),
 ]
 
+# Real translations (not machine-garbled placeholders) for every category
+# name, keyed the same way as CATEGORY_IMAGES/DESTINATION_TRANSLATIONS below.
+CATEGORY_TRANSLATIONS = {
+    'Attractions': {'ja': {'name': '観光スポット'}, 'ne': {'name': 'आकर्षणहरू'}, 'hi': {'name': 'आकर्षण'}},
+    'Restaurants': {'ja': {'name': 'レストラン'}, 'ne': {'name': 'रेस्टुरेन्टहरू'}, 'hi': {'name': 'रेस्टोरेंट'}},
+    'Hotels': {'ja': {'name': 'ホテル'}, 'ne': {'name': 'होटलहरू'}, 'hi': {'name': 'होटल'}},
+    'Cafés': {'ja': {'name': 'カフェ'}, 'ne': {'name': 'क्याफेहरू'}, 'hi': {'name': 'कैफे'}},
+    'Shopping': {'ja': {'name': 'ショッピング'}, 'ne': {'name': 'किनमेल'}, 'hi': {'name': 'खरीदारी'}},
+    'Museums': {'ja': {'name': '博物館'}, 'ne': {'name': 'संग्रहालयहरू'}, 'hi': {'name': 'संग्रहालय'}},
+    'Beaches': {'ja': {'name': 'ビーチ'}, 'ne': {'name': 'समुद्री तटहरू'}, 'hi': {'name': 'समुद्र तट'}},
+    'Parks': {'ja': {'name': '公園'}, 'ne': {'name': 'पार्कहरू'}, 'hi': {'name': 'पार्क'}},
+    'Temples': {'ja': {'name': '寺院'}, 'ne': {'name': 'मन्दिरहरू'}, 'hi': {'name': 'मंदिर'}},
+    'Historical Places': {'ja': {'name': '史跡'}, 'ne': {'name': 'ऐतिहासिक स्थलहरू'}, 'hi': {'name': 'ऐतिहासिक स्थल'}},
+    'Adventure': {'ja': {'name': 'アドベンチャー'}, 'ne': {'name': 'साहसिक यात्रा'}, 'hi': {'name': 'साहसिक यात्रा'}},
+    'Nightlife': {'ja': {'name': 'ナイトライフ'}, 'ne': {'name': 'नाइटलाइफ'}, 'hi': {'name': 'नाइटलाइफ़'}},
+}
+
 # Every image below was individually verified against Wikipedia/Wikimedia
 # Commons — the article/file was opened, its description checked, and (for
 # ambiguous cases) the photo itself was viewed to confirm it actually shows
@@ -80,6 +97,162 @@ DESTINATION_IMAGES = {
         'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/500px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg',
         'image_source_url': 'https://en.wikipedia.org/wiki/Sydney',
         'image_credit': 'Benh LIEU SONG (Flickr) — CC BY-SA 4.0',
+    },
+}
+
+DESTINATION_TRANSLATIONS = {
+    'Tokyo': {
+        'ja': {'name': '東京', 'description': '古代の寺院と未来的な高層ビルが融合する、ネオンきらめく日本の首都。'},
+        'ne': {'name': 'टोकियो', 'description': 'प्राचीन मन्दिरहरू र भविष्यवादी गगनचुम्बी भवनहरू मिश्रित जापानको नियोन-उज्यालो राजधानी।'},
+        'hi': {'name': 'टोक्यो', 'description': 'प्राचीन मंदिरों और भविष्यवादी गगनचुंबी इमारतों का मिश्रण, जापान की नियॉन-रोशनी वाली राजधानी।'},
+    },
+    'Kyoto': {
+        'ja': {'name': '京都', 'description': '日本の文化の中心地 — 数千の寺院、神社、歴史的な芸妓の街並み。'},
+        'ne': {'name': 'क्योतो', 'description': 'जापानको सांस्कृतिक हृदय — हजारौं मन्दिरहरू, शिन्तो मन्दिरहरू, र ऐतिहासिक गेइशा क्षेत्रहरू।'},
+        'hi': {'name': 'क्योटो', 'description': 'जापान का सांस्कृतिक हृदय — हज़ारों मंदिर, तीर्थस्थल और ऐतिहासिक गेशा क्षेत्र।'},
+    },
+    'Osaka': {
+        'ja': {'name': '大阪', 'description': '屋台グルメ、ナイトライフ、大阪城で知られる、食通の楽園。'},
+        'ne': {'name': 'ओसाका', 'description': 'स्ट्रिट फूड, नाइटलाइफ र ओसाका किल्लाका लागि प्रसिद्ध खानाप्रेमीहरूको स्वर्ग।'},
+        'hi': {'name': 'ओसाका', 'description': 'स्ट्रीट फूड, नाइटलाइफ़ और ओसाका कैसल के लिए मशहूर, खाने के शौकीनों का स्वर्ग।'},
+    },
+    'Fukuoka': {
+        'ja': {'name': '福岡', 'description': 'とんこつラーメン、ビーチ、自然へのアクセスの良さで知られる、のんびりとした港町。'},
+        'ne': {'name': 'फुकुओका', 'description': 'टोन्कोत्सु रामेन, समुद्री तट र प्रकृतिसम्म सजिलो पहुँचका लागि प्रसिद्ध शान्त तटीय सहर।'},
+        'hi': {'name': 'फुकुओका', 'description': 'टोंकोत्सु रामेन, समुद्र तटों और प्रकृति तक आसान पहुंच के लिए प्रसिद्ध एक निश्चिंत तटीय शहर।'},
+    },
+    'Paris': {
+        'ja': {'name': 'パリ', 'description': '光の都 — 象徴的なランドマーク、世界クラスの芸術、忘れられない美食。'},
+        'ne': {'name': 'पेरिस', 'description': 'प्रकाशको सहर — प्रतिष्ठित स्मारकहरू, विश्वस्तरीय कला, र अविस्मरणीय परिकारहरू।'},
+        'hi': {'name': 'पेरिस', 'description': 'रोशनी का शहर — प्रतिष्ठित स्मारक, विश्व स्तरीय कला और अविस्मरणीय व्यंजन।'},
+    },
+    'London': {
+        'ja': {'name': 'ロンドン', 'description': '博物館、王室ゆかりの名所、多様な文化にあふれる歴史ある世界都市。'},
+        'ne': {'name': 'लन्डन', 'description': 'संग्रहालयहरू, शाही स्मारकहरू, र विविध संस्कृतिले भरिपूर्ण ऐतिहासिक विश्व राजधानी।'},
+        'hi': {'name': 'लंदन', 'description': 'संग्रहालयों, शाही स्मारकों और विविध संस्कृति से भरपूर एक ऐतिहासिक वैश्विक राजधानी।'},
+    },
+    'New York': {
+        'ja': {'name': 'ニューヨーク', 'description': '眠らない街 — 象徴的なスカイライン、ブロードウェイ、絶え間ないエネルギー。'},
+        'ne': {'name': 'न्यूयोर्क', 'description': 'कहिल्यै नसुत्ने सहर — प्रतिष्ठित स्काइलाइन, ब्रोडवे, र निरन्तर ऊर्जा।'},
+        'hi': {'name': 'न्यूयॉर्क', 'description': 'कभी न सोने वाला शहर — प्रतिष्ठित स्काइलाइन, ब्रॉडवे और अनवरत ऊर्जा।'},
+    },
+    'Dubai': {
+        'ja': {'name': 'ドバイ', 'description': '記録的な高層ビルと高級ショッピングが揃う、未来的な砂漠の大都市。'},
+        'ne': {'name': 'दुबई', 'description': 'रेकर्ड-ब्रेकिङ गगनचुम्बी भवनहरू र विलासी किनमेलको भविष्यवादी मरुभूमि महानगर।'},
+        'hi': {'name': 'दुबई', 'description': 'रिकॉर्ड तोड़ गगनचुंबी इमारतों और लक्जरी शॉपिंग वाला एक भविष्यवादी रेगिस्तानी महानगर।'},
+    },
+    'Kathmandu': {
+        'ja': {'name': 'カトマンズ', 'description': '古代寺院と山岳アドベンチャーにあふれる、ヒマラヤへの玄関口。'},
+        'ne': {'name': 'काठमाडौं', 'description': 'प्राचीन मन्दिरहरू र पहाडी साहसिक यात्राले भरिपूर्ण हिमालको प्रवेशद्वार।'},
+        'hi': {'name': 'काठमांडू', 'description': 'प्राचीन मंदिरों और पर्वतीय रोमांच से भरपूर, हिमालय का प्रवेश द्वार।'},
+    },
+    'Sydney': {
+        'ja': {'name': 'シドニー', 'description': 'オペラハウス、ビーチ、アウトドアなライフスタイルで有名な美しい港湾都市。'},
+        'ne': {'name': 'सिड्नी', 'description': 'आफ्नो ओपेरा हाउस, समुद्री तटहरू, र आउटडोर जीवनशैलीका लागि प्रसिद्ध मनमोहक बन्दरगाह सहर।'},
+        'hi': {'name': 'सिडनी', 'description': 'अपने ओपेरा हाउस, समुद्र तटों और आउटडोर जीवनशैली के लिए प्रसिद्ध एक शानदार बंदरगाह शहर।'},
+    },
+}
+
+PLACE_TRANSLATIONS = {
+    'Senso-ji Temple': {
+        'ja': {'name': '浅草寺', 'description': '歴史ある浅草にある古代仏教寺院。'},
+        'ne': {'name': 'सेन्सोजी मन्दिर', 'description': 'ऐतिहासिक असाकुसामा रहेको प्राचीन बौद्ध मन्दिर।'},
+        'hi': {'name': 'सेंसोजी मंदिर', 'description': 'ऐतिहासिक असाकुसा में एक प्राचीन बौद्ध मंदिर।'},
+    },
+    'Tokyo Skytree': {
+        'ja': {'name': '東京スカイツリー', 'description': 'パノラマの街並みを一望できる象徴的な電波塔。'},
+        'ne': {'name': 'टोकियो स्काइट्री', 'description': 'सहरको विहङ्गम दृश्य दिने प्रतिष्ठित प्रसारण टावर।'},
+        'hi': {'name': 'टोक्यो स्काईट्री', 'description': 'शहर के विहंगम दृश्यों वाला एक प्रतिष्ठित प्रसारण टावर।'},
+    },
+    'Fushimi Inari Shrine': {
+        'ja': {'name': '伏見稲荷大社', 'description': '数千本の朱色の鳥居で有名な神社。'},
+        'ne': {'name': 'फुशिमी इनारी शिन्तो मन्दिर', 'description': 'हजारौं सिन्दुरे तोरी ढोकाहरू भएको प्रसिद्ध मन्दिर।'},
+        'hi': {'name': 'फुशिमी इनारी श्राइन', 'description': 'हज़ारों लाल तोरी द्वारों वाला एक प्रसिद्ध तीर्थस्थल।'},
+    },
+    'Arashiyama Bamboo Grove': {
+        'ja': {'name': '嵐山竹林', 'description': '静寂に包まれた、そびえ立つ竹林の小道。'},
+        'ne': {'name': 'अरासियामा बाँस वन', 'description': 'शान्त, अग्लो बाँसको जंगल भएको मार्ग।'},
+        'hi': {'name': 'अराशियामा बैंबू ग्रोव', 'description': 'एक शांत, ऊंचे बांस के जंगल का रास्ता।'},
+    },
+    'Osaka Castle': {
+        'ja': {'name': '大阪城', 'description': '日本を代表する歴史的名所のひとつ。'},
+        'ne': {'name': 'ओसाका किल्ला', 'description': 'जापानका सबैभन्दा प्रतिष्ठित ऐतिहासिक स्मारकहरू मध्ये एक।'},
+        'hi': {'name': 'ओसाका कैसल', 'description': 'जापान के सबसे प्रतिष्ठित ऐतिहासिक स्थलों में से एक।'},
+    },
+    'Dotonbori': {
+        'ja': {'name': '道頓堀', 'description': 'ネオンが輝くグルメと娯楽の街。'},
+        'ne': {'name': 'दोतोन्बोरी', 'description': 'नियोन बत्तीले सजिएको भोजन र मनोरञ्जन क्षेत्र।'},
+        'hi': {'name': 'दोतोनबोरी', 'description': 'नियॉन रोशनी से जगमगाता भोजन और मनोरंजन क्षेत्र।'},
+    },
+    'Ohori Park': {
+        'ja': {'name': '大濠公園', 'description': '市の中心部にある、湖畔の美しい公園。'},
+        'ne': {'name': 'ओहोरी पार्क', 'description': 'सहरको हृदयमा रहेको सुरम्य ताल किनारको पार्क।'},
+        'hi': {'name': 'ओहोरी पार्क', 'description': 'शहर के केंद्र में स्थित एक सुरम्य झील किनारे का पार्क।'},
+    },
+    'Yatai Food Stalls': {
+        'ja': {'name': '屋台', 'description': '地元の名物料理を提供する屋外の屋台。'},
+        'ne': {'name': 'यातेइ फूड स्टलहरू', 'description': 'स्थानीय परिकारहरू पस्कने खुला हावाका सडक फूड स्टलहरू।'},
+        'hi': {'name': 'यातेई फूड स्टॉल्स', 'description': 'स्थानीय व्यंजन परोसने वाले खुले हवा के स्ट्रीट फूड स्टॉल।'},
+    },
+    'Eiffel Tower': {
+        'ja': {'name': 'エッフェル塔', 'description': 'シャン・ド・マルスにある世界的に有名な鉄骨タワー。'},
+        'ne': {'name': 'एफिल टावर', 'description': 'च्याम्प डे मार्समा रहेको विश्वप्रसिद्ध फलामे जालीदार टावर।'},
+        'hi': {'name': 'एफिल टावर', 'description': 'शैंप डे मार्स पर स्थित विश्व प्रसिद्ध लोहे की जालीदार मीनार।'},
+    },
+    'Louvre Museum': {
+        'ja': {'name': 'ルーヴル美術館', 'description': 'モナ・リザを所蔵する世界最大の美術館。'},
+        'ne': {'name': 'लुभ्र संग्रहालय', 'description': 'मोना लिसाको घर, विश्वको सबैभन्दा ठूलो कला संग्रहालय।'},
+        'hi': {'name': 'लूव्र संग्रहालय', 'description': 'मोना लिसा का घर, विश्व का सबसे बड़ा कला संग्रहालय।'},
+    },
+    'British Museum': {
+        'ja': {'name': '大英博物館', 'description': '人類の歴史と文化を紹介する世界的に有名な博物館。'},
+        'ne': {'name': 'ब्रिटिश संग्रहालय', 'description': 'मानव इतिहास र संस्कृतिको विश्वप्रसिद्ध संग्रहालय।'},
+        'hi': {'name': 'ब्रिटिश संग्रहालय', 'description': 'मानव इतिहास और संस्कृति का विश्व-प्रसिद्ध संग्रहालय।'},
+    },
+    'Tower Bridge': {
+        'ja': {'name': 'タワーブリッジ', 'description': 'テムズ川に架かる象徴的なヴィクトリア朝の跳ね橋。'},
+        'ne': {'name': 'टावर ब्रिज', 'description': 'टेम्स नदीमाथिको प्रतिष्ठित भिक्टोरियन बास्कुल पुल।'},
+        'hi': {'name': 'टावर ब्रिज', 'description': 'टेम्स नदी पर बना प्रतिष्ठित विक्टोरियन बैस्कुल पुल।'},
+    },
+    'Central Park': {
+        'ja': {'name': 'セントラルパーク', 'description': 'マンハッタンの中心に広がる都市公園。'},
+        'ne': {'name': 'सेन्ट्रल पार्क', 'description': 'म्यानह्याट्नको बीचमा फैलिएको विशाल सहरी पार्क।'},
+        'hi': {'name': 'सेंट्रल पार्क', 'description': 'मैनहट्टन के बीचोबीच फैला विशाल शहरी पार्क।'},
+    },
+    'Times Square': {
+        'ja': {'name': 'タイムズスクエア', 'description': '巨大広告で輝く、ニューヨークの中心地。'},
+        'ne': {'name': 'टाइम्स स्क्वायर', 'description': 'न्यूयोर्कको चम्किलो, विज्ञापन-बोर्डले उज्यालो हृदयस्थल।'},
+        'hi': {'name': 'टाइम्स स्क्वायर', 'description': 'न्यूयॉर्क का चमकदार, विज्ञापन-रोशनी से जगमगाता केंद्र।'},
+    },
+    'Burj Khalifa': {
+        'ja': {'name': 'ブルジュ・ハリファ', 'description': '展望デッキを備えた世界一高い建物。'},
+        'ne': {'name': 'बुर्ज खलिफा', 'description': 'अवलोकन डेकसहितको विश्वकै अग्लो भवन।'},
+        'hi': {'name': 'बुर्ज ख़लीफ़ा', 'description': 'एक अवलोकन डेक वाली दुनिया की सबसे ऊंची इमारत।'},
+    },
+    'Dubai Mall': {
+        'ja': {'name': 'ドバイ・モール', 'description': '地球上で最大級のショッピングモールのひとつ。'},
+        'ne': {'name': 'दुबई मल', 'description': 'पृथ्वीका सबैभन्दा ठूला किनमेल मलहरू मध्ये एक।'},
+        'hi': {'name': 'दुबई मॉल', 'description': 'पृथ्वी पर सबसे बड़े शॉपिंग मॉल में से एक।'},
+    },
+    'Swayambhunath Stupa': {
+        'ja': {'name': 'スワヤンブナート', 'description': 'カトマンズ盆地を見下ろす、丘の上の古代仏塔。'},
+        'ne': {'name': 'स्वयम्भूनाथ स्तूप', 'description': 'काठमाडौं उपत्यका नियाल्ने पहाडी टाकुरामा रहेको प्राचीन स्तूप।'},
+        'hi': {'name': 'स्वयंभूनाथ स्तूप', 'description': 'काठमांडू घाटी को निहारता एक प्राचीन पहाड़ी स्तूप।'},
+    },
+    'Thamel Market': {
+        'ja': {'name': 'タメル市場', 'description': '商店、カフェ、トレッキング用品店が並ぶ賑やかな観光街。'},
+        'ne': {'name': 'थमेल बजार', 'description': 'पसल, क्याफे, र ट्रेकिङ सामग्रीले भरिपूर्ण चहलपहल भएको पर्यटकीय क्षेत्र।'},
+        'hi': {'name': 'थमेल मार्केट', 'description': 'दुकानों, कैफे और ट्रैकिंग गियर से भरा हलचल भरा पर्यटक क्षेत्र।'},
+    },
+    'Sydney Opera House': {
+        'ja': {'name': 'シドニー・オペラハウス', 'description': '港に佇む世界的に有名な舞台芸術の殿堂。'},
+        'ne': {'name': 'सिड्नी ओपेरा हाउस', 'description': 'बन्दरगाहमा रहेको विश्वप्रसिद्ध परफर्मिङ आर्ट्स स्थल।'},
+        'hi': {'name': 'सिडनी ओपेरा हाउस', 'description': 'बंदरगाह पर स्थित विश्व प्रसिद्ध प्रदर्शन कला स्थल।'},
+    },
+    'Bondi Beach': {
+        'ja': {'name': 'ボンダイビーチ', 'description': 'シドニーで最も象徴的なビーチと海岸沿いの散策路。'},
+        'ne': {'name': 'बोन्डाई बिच', 'description': 'सिड्नीको सबैभन्दा प्रतिष्ठित समुद्री तट र तटीय पैदल मार्ग।'},
+        'hi': {'name': 'बॉन्डाई बीच', 'description': 'सिडनी का सबसे प्रतिष्ठित समुद्र तट और तटीय सैरगाह।'},
     },
 }
 
@@ -299,7 +472,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         categories = {}
         for name, icon in CATEGORIES:
-            category, _ = Category.objects.get_or_create(name=name, defaults={'icon': icon})
+            category, _ = Category.objects.update_or_create(
+                name=name,
+                defaults={'icon': icon, 'translations': CATEGORY_TRANSLATIONS.get(name, {})},
+            )
             categories[name] = category
         self.stdout.write(self.style.SUCCESS(f'{len(categories)} categories ready.'))
 
@@ -320,6 +496,7 @@ class Command(BaseCommand):
                     'image_source_url': image['image_source_url'],
                     'image_credit': image['image_credit'],
                     'interest_tags': entry['interests'],
+                    'translations': DESTINATION_TRANSLATIONS.get(entry['name'], {}),
                 },
             )
             destination_count += 1
@@ -340,6 +517,7 @@ class Command(BaseCommand):
                         'image_credit': place_image['image_credit'],
                         'latitude': lat,
                         'longitude': lng,
+                        'translations': PLACE_TRANSLATIONS.get(place_name, {}),
                     },
                 )
                 place_count += 1

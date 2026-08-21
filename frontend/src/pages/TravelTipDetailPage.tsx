@@ -1,15 +1,17 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ArrowLeft } from 'lucide-react'
 import { getTravelTip } from '@/data/travelTips'
 
 function TravelTipDetailPage() {
+  const { t } = useTranslation()
   const { slug } = useParams<{ slug: string }>()
   const tip = slug ? getTravelTip(slug) : undefined
 
   if (!tip) {
     return (
       <div className="flex flex-1 items-center justify-center py-24 text-center text-neutral-500">
-        Tip not found.
+        {t('travelTips.notFound')}
       </div>
     )
   }
@@ -18,7 +20,7 @@ function TravelTipDetailPage() {
     <main className="mx-auto max-w-3xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       <Link to="/travel-tips" className="mb-6 flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-800">
         <ArrowLeft className="size-4" />
-        All Travel Tips
+        {t('travelTips.allTips')}
       </Link>
 
       <span className="text-xs font-medium uppercase tracking-wide text-accent-600">{tip.category}</span>

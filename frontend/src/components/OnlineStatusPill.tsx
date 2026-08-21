@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 
 function OnlineStatusPill({ className = '' }: { className?: string }) {
+  const { t } = useTranslation()
   const { isOnline, isSyncing } = useOnlineStatus()
 
   return (
@@ -10,7 +12,7 @@ function OnlineStatusPill({ className = '' }: { className?: string }) {
       } ${className}`}
     >
       <span className={`size-2 rounded-full ${isOnline ? 'bg-primary-500' : 'bg-neutral-400'}`} />
-      {isSyncing ? 'Syncing…' : isOnline ? 'Online' : 'Offline'}
+      {isSyncing ? t('common.syncing') : isOnline ? t('common.online') : t('common.offline')}
     </span>
   )
 }

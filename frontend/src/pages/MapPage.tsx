@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { LocateFixed, Star } from 'lucide-react'
 import { fetchPlaces } from '@/services/placesService'
 import { createMarkerIcon, createUserLocationIcon } from '@/utils/mapIcons'
 import { haversineDistanceKm } from '@/utils/distance'
+import { getLocalizedName } from '@/utils/localization'
 import type { Place } from '@/types'
 
 const DEFAULT_CENTER: [number, number] = [20, 20]
@@ -23,6 +25,7 @@ function FlyToLocation({ position }: { position: [number, number] | null }) {
 }
 
 function MapPage() {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [places, setPlaces] = useState<Place[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -57,7 +60,7 @@ function MapPage() {
   function handleFindNearMe() {
     setLocationError(null)
     if (!navigator.geolocation) {
-      setLocationError('Please allow location access to discover places near you.')
+      setLocationError(t('common.locationUnavailable'))
       return
     }
     navigator.geolocation.getCurrentPosition(
@@ -65,7 +68,7 @@ function MapPage() {
         setUserLocation([position.coords.latitude, position.coords.longitude])
       },
       () => {
-        setLocationError('Please allow location access to discover places near you.')
+        setLocationError(t('common.locationUnavailable'))
       },
       { enableHighAccuracy: true, timeout: 10000 },
     )
@@ -75,9 +78,9 @@ function MapPage() {
     <main className="flex flex-1 flex-col">
       <div className="flex flex-col gap-3 border-b border-neutral-200 bg-white px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
         <div>
-          <h1 className="text-xl font-semibold text-neutral-900">Interactive Map</h1>
+          <h1 className="text-xl font-semibold text-neutral-900">{t('map.title')}</h1>
           <p className="text-sm text-neutral-500">
-            {isLoading ? 'Loading places…' : `${mappablePlaces.length} places plotted`}
+            {isLoading ? t('map.loadingPlaces') : t('map.placesPlotted', { count: mappablePlaces.length })}
           </p>
         </div>
         <button
@@ -85,7 +88,7 @@ function MapPage() {
           className="flex items-center justify-center gap-2 rounded-pill bg-accent-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-accent-600"
         >
           <LocateFixed className="size-4" />
-          Places Near Me
+          {t('map.placesNearMe')}
         </button>
       </div>
 
@@ -112,19 +115,24 @@ function MapPage() {
               >
                 <Popup>
                   <div className="flex w-48 flex-col gap-2">
-                    <img src={place.image_url} alt={place.name} className="h-24 w-full rounded-lg object-cover" />
+                    <img
+                      src={place.image_url}
+                      alt={getLocalizedName(place, i18n.language)}
+                      className="h-24 w-full rounded-lg object-cover"
+                    />
                     <div>
-                      <p className="font-semibold text-neutral-900">{place.name}</p>
+                      <p className="font-semibold text-neutral-900">{getLocalizedName(place, i18n.language)}</p>
                       <p className="flex items-center gap-1 text-xs text-neutral-500">
                         <Star className="size-3.5 fill-accent-500 text-accent-500" />
-                        {(place.average_rating ?? Number(place.rating)).toFixed(1)} · {place.category.name}
+                        {(place.average_rating ?? Number(place.rating)).toFixed(1)} ·{' '}
+                        {getLocalizedName(place.category, i18n.language)}
                       </p>
                     </div>
                     <button
                       onClick={() => navigate(`/destinations/${place.destination}`)}
                       className="rounded-pill bg-neutral-900 py-1.5 text-xs font-medium text-white"
                     >
-                      View Details
+                      {t('map.viewDetails')}
                     </button>
                   </div>
                 </Popup>
@@ -133,7 +141,7 @@ function MapPage() {
 
             {userLocation && (
               <Marker position={userLocation} icon={createUserLocationIcon()}>
-                <Popup>You are here</Popup>
+                <Popup>{t('map.youAreHere')}</Popup>
               </Marker>
             )}
           </MapContainer>
@@ -141,17 +149,25 @@ function MapPage() {
 
         {userLocation && (
           <aside className="w-full border-t border-neutral-200 bg-white p-4 lg:w-80 lg:overflow-y-auto lg:border-t-0 lg:border-l">
-            <h2 className="mb-3 text-sm font-semibold text-neutral-900">Nearby places</h2>
+            <h2 className="mb-3 text-sm font-semibold text-neutral-900">{t('map.nearbyPlaces')}</h2>
             {nearbyPlaces.length === 0 ? (
-              <p className="text-sm text-neutral-500">No nearby places found.</p>
+              <p className="text-sm text-neutral-500">{t('map.noNearbyPlaces')}</p>
             ) : (
               <ul className="flex flex-col gap-3">
                 {nearbyPlaces.map(({ place, distanceKm }) => (
                   <li key={place.id} className="flex items-center gap-3">
-                    <img src={place.image_url} alt={place.name} className="size-12 rounded-lg object-cover" />
+                    <img
+                      src={place.image_url}
+                      alt={getLocalizedName(place, i18n.language)}
+                      className="size-12 rounded-lg object-cover"
+                    />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-neutral-900">{place.name}</p>
-                      <p className="text-xs text-neutral-500">{distanceKm.toFixed(0)} km away</p>
+                      <p className="truncate text-sm font-medium text-neutral-900">
+                        {getLocalizedName(place, i18n.language)}
+                      </p>
+                      <p className="text-xs text-neutral-500">
+                        {t('map.kmAway', { distance: distanceKm.toFixed(0) })}
+                      </p>
                     </div>
                   </li>
                 ))}

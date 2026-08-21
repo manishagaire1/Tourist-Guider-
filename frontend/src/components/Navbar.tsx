@@ -1,23 +1,26 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Compass, Menu, User, X } from 'lucide-react'
 import OnlineStatusPill from '@/components/OnlineStatusPill'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { useAuth } from '@/hooks/useAuth'
 
-const navLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/explore', label: 'Explore' },
-  { to: '/destinations', label: 'Destinations' },
-  { to: '/map', label: 'Map' },
-  { to: '/trips', label: 'My Trips' },
-  { to: '/favorites', label: 'Favorites' },
-  { to: '/travel-tips', label: 'Travel Tips' },
-]
-
 function Navbar() {
+  const { t } = useTranslation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+
+  const navLinks = [
+    { to: '/', label: t('nav.home') },
+    { to: '/explore', label: t('nav.explore') },
+    { to: '/destinations', label: t('nav.destinations') },
+    { to: '/map', label: t('nav.map') },
+    { to: '/trips', label: t('nav.myTrips') },
+    { to: '/favorites', label: t('nav.favorites') },
+    { to: '/travel-tips', label: t('nav.travelTips') },
+  ]
 
   async function handleLogout() {
     await logout()
@@ -51,6 +54,7 @@ function Navbar() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <OnlineStatusPill />
+          <LanguageSwitcher />
           {user ? (
             <>
               <Link
@@ -64,7 +68,7 @@ function Navbar() {
                 onClick={handleLogout}
                 className="rounded-pill bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-700"
               >
-                Logout
+                {t('nav.logout')}
               </button>
             </>
           ) : (
@@ -73,13 +77,13 @@ function Navbar() {
                 to="/login"
                 className="rounded-pill px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
               >
-                Login
+                {t('nav.login')}
               </Link>
               <Link
                 to="/register"
                 className="rounded-pill bg-accent-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-600"
               >
-                Register
+                {t('nav.register')}
               </Link>
             </>
           )}
@@ -88,7 +92,7 @@ function Navbar() {
         <button
           className="flex items-center justify-center rounded-lg p-2 text-neutral-700 lg:hidden"
           onClick={() => setIsMenuOpen((open) => !open)}
-          aria-label="Toggle menu"
+          aria-label={t('common.toggleMenu')}
         >
           {isMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
         </button>
@@ -112,8 +116,11 @@ function Navbar() {
               </NavLink>
             ))}
           </div>
+          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-neutral-200 pt-4">
+            <OnlineStatusPill />
+            <LanguageSwitcher />
+          </div>
           <div className="mt-4 flex flex-col gap-2 border-t border-neutral-200 pt-4">
-            <OnlineStatusPill className="self-start" />
             {user ? (
               <>
                 <Link
@@ -128,7 +135,7 @@ function Navbar() {
                   onClick={handleLogout}
                   className="rounded-pill bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
                 >
-                  Logout
+                  {t('nav.logout')}
                 </button>
               </>
             ) : (
@@ -138,14 +145,14 @@ function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                   className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
                 >
-                  Login
+                  {t('nav.login')}
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setIsMenuOpen(false)}
                   className="rounded-pill bg-accent-500 px-4 py-2 text-center text-sm font-medium text-white"
                 >
-                  Register
+                  {t('nav.register')}
                 </Link>
               </>
             )}

@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Cloud, CloudLightning, CloudRain, CloudSnow, CloudSun, Droplets, Sun, Sunrise, Sunset, Wind } from 'lucide-react'
-import { ACTIVITY_RECOMMENDATIONS, fetchWeather, type WeatherCondition, type WeatherData } from '@/services/weatherService'
+import {
+  ACTIVITY_RECOMMENDATION_KEYS,
+  CONDITION_LABEL_KEYS,
+  fetchWeather,
+  type WeatherCondition,
+  type WeatherData,
+} from '@/services/weatherService'
 
 const CONDITION_ICONS: Record<WeatherCondition, typeof Sun> = {
   Sunny: Sun,
@@ -11,18 +18,22 @@ const CONDITION_ICONS: Record<WeatherCondition, typeof Sun> = {
   Snowy: CloudSnow,
 }
 
-function WeatherCard({ destinationName }: { destinationName: string }) {
+// destinationName is the English name — kept stable as the mock-weather seed
+// key regardless of active language, so switching languages doesn't change
+// "today's weather"; displayName is what's shown to the user.
+function WeatherCard({ destinationName, displayName }: { destinationName: string; displayName?: string }) {
+  const { t, i18n } = useTranslation()
   const [weather, setWeather] = useState<WeatherData | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    fetchWeather(destinationName).then((data) => {
+    fetchWeather(destinationName, i18n.language).then((data) => {
       if (!cancelled) setWeather(data)
     })
     return () => {
       cancelled = true
     }
-  }, [destinationName])
+  }, [destinationName, i18n.language])
 
   if (!weather) {
     return <div className="h-64 animate-pulse rounded-card bg-neutral-200" />
@@ -34,9 +45,9 @@ function WeatherCard({ destinationName }: { destinationName: string }) {
     <div className="rounded-card border border-neutral-200 bg-white p-6 shadow-card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-neutral-500">Weather in {destinationName}</p>
+          <p className="text-sm text-neutral-500">{t('weather.weatherIn', { name: displayName ?? destinationName })}</p>
           <p className="text-4xl font-semibold text-neutral-900">{weather.temp}°C</p>
-          <p className="text-neutral-600">{weather.condition}</p>
+          <p className="text-neutral-600">{t(CONDITION_LABEL_KEYS[weather.condition])}</p>
         </div>
         <Icon className="size-16 text-accent-500" strokeWidth={1.5} />
       </div>
@@ -79,11 +90,11 @@ function WeatherCard({ destinationName }: { destinationName: string }) {
       </div>
 
       <div className="mt-5 border-t border-neutral-100 pt-5">
-        <p className="mb-2 text-sm font-medium text-neutral-800">Recommended activities today</p>
+        <p className="mb-2 text-sm font-medium text-neutral-800">{t('weather.recommendedActivities')}</p>
         <div className="flex flex-wrap gap-2">
-          {ACTIVITY_RECOMMENDATIONS[weather.condition].map((activity) => (
-            <span key={activity} className="rounded-pill bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">
-              {activity}
+          {ACTIVITY_RECOMMENDATION_KEYS[weather.condition].map((key) => (
+            <span key={key} className="rounded-pill bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">
+              {t(key)}
             </span>
           ))}
         </div>

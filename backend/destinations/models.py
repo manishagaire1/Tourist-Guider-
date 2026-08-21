@@ -19,6 +19,11 @@ class Destination(models.Model):
         default=list, blank=True,
         help_text='List of users.TravelPreference.Interest values this destination matches',
     )
+    translations = models.JSONField(
+        default=dict, blank=True,
+        help_text='{"ja": {"name": ..., "description": ...}, "ne": {...}, "hi": {...}} — '
+                   'the base name/description fields remain the English source of truth.',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

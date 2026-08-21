@@ -1,8 +1,10 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/hooks/useAuth'
 
 function RegisterPage() {
+  const { t } = useTranslation()
   const { register } = useAuth()
   const navigate = useNavigate()
 
@@ -20,7 +22,7 @@ function RegisterPage() {
     setError(null)
 
     if (form.password !== form.password2) {
-      setError("Passwords don't match.")
+      setError(t('auth.passwordsDontMatch'))
       return
     }
 
@@ -31,7 +33,7 @@ function RegisterPage() {
     } catch (err) {
       const detail = (err as { response?: { data?: Record<string, string[]> } })?.response?.data
       const firstError = detail ? Object.values(detail).flat()[0] : undefined
-      setError(firstError ?? 'Registration failed. Please try again.')
+      setError(firstError ?? t('auth.registrationFailed'))
     } finally {
       setIsSubmitting(false)
     }
@@ -40,12 +42,12 @@ function RegisterPage() {
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-16">
       <div className="w-full max-w-sm rounded-card bg-white p-8 shadow-card">
-        <h1 className="text-2xl font-semibold text-neutral-900">Create your account</h1>
-        <p className="mt-1 text-sm text-neutral-500">Start planning your next adventure.</p>
+        <h1 className="text-2xl font-semibold text-neutral-900">{t('auth.createAccount')}</h1>
+        <p className="mt-1 text-sm text-neutral-500">{t('auth.registerSubtitle')}</p>
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-            Username
+            {t('auth.username')}
             <input
               type="text"
               required
@@ -55,7 +57,7 @@ function RegisterPage() {
             />
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-            Email
+            {t('auth.email')}
             <input
               type="email"
               required
@@ -65,7 +67,7 @@ function RegisterPage() {
             />
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-            Password
+            {t('auth.password')}
             <input
               type="password"
               required
@@ -75,7 +77,7 @@ function RegisterPage() {
             />
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-medium text-neutral-700">
-            Confirm Password
+            {t('auth.confirmPassword')}
             <input
               type="password"
               required
@@ -92,14 +94,14 @@ function RegisterPage() {
             disabled={isSubmitting}
             className="mt-2 rounded-pill bg-accent-500 py-2.5 text-sm font-medium text-white transition hover:bg-accent-600 disabled:opacity-60"
           >
-            {isSubmitting ? 'Creating account…' : 'Register'}
+            {isSubmitting ? t('auth.creatingAccount') : t('auth.register')}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-neutral-500">
-          Already have an account?{' '}
+          {t('auth.alreadyHaveAccount')}{' '}
           <Link to="/login" className="font-medium text-accent-600 hover:underline">
-            Log in
+            {t('auth.logInLink')}
           </Link>
         </p>
       </div>

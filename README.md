@@ -34,6 +34,7 @@ Tourist Guide helps travelers discover destinations, search attractions, view pl
 - [x] Deployment preparation (production security settings, WhiteNoise static files, gunicorn, Procfile, Vercel SPA rewrite)
 - [x] Progressive Web App — installable, service worker with offline caching, update-available prompt
 - [x] Offline trip itineraries (IndexedDB, "Save for Offline" per trip, offline reorder/remove/date-edit with a synced mutation queue, online/offline indicator)
+- [x] Multi-language support (English, Japanese, Nepali, Hindi — i18next-driven UI, translated destination/place/category content stored per-language on the existing records, locale-aware date/currency formatting, language switcher in the navbar)
 
 ## Technology Stack
 
@@ -203,10 +204,9 @@ Frontend flows (registration, login/logout, search, filters, map, place details,
 
 ## Roadmap / Future Improvements
 
-- Real-time availability and booking integrations
+- Real-time availability and booking integrations (Viator)
 - Server-side rendering / static generation for SEO on public pages
-- Offline-friendly trip itineraries (PWA)
-- Multi-language support
+- Live currency conversion for the budget calculator (currently USD-denominated with locale-aware formatting)
 
 ---
 

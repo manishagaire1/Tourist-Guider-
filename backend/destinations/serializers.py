@@ -10,7 +10,7 @@ class DestinationSerializer(serializers.ModelSerializer):
         model = Destination
         fields = [
             'id', 'name', 'country', 'slug', 'description', 'image_url', 'image_source',
-            'image_source_url', 'image_credit', 'rating',
+            'image_source_url', 'image_credit', 'rating', 'translations',
             'best_time_to_visit', 'latitude', 'longitude', 'interest_tags', 'places_count', 'created_at',
         ]
         read_only_fields = ['id', 'slug', 'created_at']

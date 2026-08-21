@@ -1,5 +1,6 @@
 import { useState, type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Heart } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -11,6 +12,7 @@ interface FavoriteButtonProps {
 }
 
 function FavoriteButton({ type, id, className = '' }: FavoriteButtonProps) {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const navigate = useNavigate()
   const { isDestinationFavorited, isPlaceFavorited, toggleDestinationFavorite, togglePlaceFavorite } =
@@ -45,7 +47,7 @@ function FavoriteButton({ type, id, className = '' }: FavoriteButtonProps) {
       type="button"
       onClick={handleClick}
       disabled={isBusy}
-      aria-label={isFavorited ? 'Remove from favorites' : 'Save to favorites'}
+      aria-label={isFavorited ? t('favorites.removeFromFavorites') : t('favorites.saveToFavorites')}
       aria-pressed={isFavorited}
       className={`flex items-center justify-center rounded-full bg-white/90 p-2 shadow-sm transition hover:bg-white disabled:opacity-60 ${className}`}
     >

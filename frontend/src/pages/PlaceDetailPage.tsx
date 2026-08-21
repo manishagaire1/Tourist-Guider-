@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Clock, ExternalLink, Globe, MapPin, Navigation, Phone, Share2, Star, Tag } from 'lucide-react'
 import AddToTripButton from '@/components/AddToTripButton'
 import FavoriteButton from '@/components/FavoriteButton'
@@ -8,9 +9,11 @@ import StarRatingInput from '@/components/StarRatingInput'
 import { useAuth } from '@/hooks/useAuth'
 import { fetchPlace, fetchPlaces } from '@/services/placesService'
 import { createReview, deleteReview, fetchReviews, updateReview } from '@/services/reviewsService'
+import { getLocalizedDescription, getLocalizedName } from '@/utils/localization'
 import type { Place, Review } from '@/types'
 
 function PlaceDetailPage() {
+  const { t, i18n } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const { user } = useAuth()
 
@@ -44,7 +47,7 @@ function PlaceDetailPage() {
         setNearby(siblingPlaces.filter((p) => p.id !== placeData.id))
       })
       .catch(() => {
-        if (!cancelled) setError("Sorry, we couldn't find this place.")
+        if (!cancelled) setError(t('common.somethingWentWrong'))
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false)
@@ -66,7 +69,7 @@ function PlaceDetailPage() {
       return
     }
     await navigator.clipboard.writeText(url)
-    setShareStatus('Link copied!')
+    setShareStatus(t('placeDetail.linkCopied'))
     setTimeout(() => setShareStatus(null), 2000)
   }
 
@@ -96,17 +99,19 @@ function PlaceDetailPage() {
   }
 
   if (isLoading) {
-    return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">Loading…</div>
+    return <div className="flex flex-1 items-center justify-center py-24 text-neutral-500">{t('common.loading')}</div>
   }
 
   if (error || !place) {
     return (
       <div className="flex flex-1 items-center justify-center py-24 text-center text-red-600">
-        {error ?? 'Place not found.'}
+        {error ?? t('common.somethingWentWrong')}
       </div>
     )
   }
 
+  const name = getLocalizedName(place, i18n.language)
+  const categoryName = getLocalizedName(place.category, i18n.language)
   const rating = place.average_rating ?? Number(place.rating)
   const directionsUrl = place.latitude && place.longitude
     ? `https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`
@@ -115,15 +120,15 @@ function PlaceDetailPage() {
   return (
     <main className="flex-1">
       <div className="relative h-72 overflow-hidden sm:h-96">
-        <img src={place.image_url} alt={place.name} className="size-full object-cover" />
+        <img src={place.image_url} alt={name} className="size-full object-cover" />
         <div className="absolute inset-0 bg-linear-to-t from-neutral-950/80 via-neutral-950/10 to-transparent" />
         <FavoriteButton type="place" id={place.id} className="absolute right-4 top-4" />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-5xl px-4 pb-8 sm:px-6 lg:px-8">
           <p className="mb-1 flex items-center gap-1 text-sm text-primary-100">
             <Tag className="size-3.5" />
-            {place.category.name}
+            {categoryName}
           </p>
-          <h1 className="text-3xl font-semibold text-white sm:text-4xl">{place.name}</h1>
+          <h1 className="text-3xl font-semibold text-white sm:text-4xl">{name}</h1>
           <p className="mt-1 flex items-center gap-1 text-primary-100">
             <MapPin className="size-4" />
             {place.address || place.destination_name}
@@ -135,7 +140,8 @@ function PlaceDetailPage() {
         <div className="flex flex-wrap items-center gap-3 border-b border-neutral-200 pb-6">
           <span className="flex items-center gap-1.5 font-medium text-neutral-900">
             <Star className="size-4 fill-accent-500 text-accent-500" />
-            {rating ? rating.toFixed(1) : 'New'} ({place.review_count} review{place.review_count === 1 ? '' : 's'})
+            {rating ? rating.toFixed(1) : t('placeDetail.new')} (
+            {t('placeDetail.reviewCount', { count: place.review_count })})
           </span>
           {place.price_range && <span className="text-neutral-600">{place.price_range}</span>}
           {place.opening_hours && (
@@ -155,18 +161,20 @@ function PlaceDetailPage() {
             className="flex items-center gap-2 rounded-pill border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 transition hover:border-accent-500 hover:text-accent-600"
           >
             <Navigation className="size-4" />
-            Get Directions
+            {t('placeDetail.getDirections')}
           </a>
           <button
             onClick={handleShare}
             className="flex items-center gap-2 rounded-pill border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-800 transition hover:border-accent-500 hover:text-accent-600"
           >
             <Share2 className="size-4" />
-            {shareStatus ?? 'Share'}
+            {shareStatus ?? t('placeDetail.share')}
           </button>
         </div>
 
-        {place.description && <p className="max-w-3xl pb-6 text-neutral-700">{place.description}</p>}
+        {place.description && (
+          <p className="max-w-3xl pb-6 text-neutral-700">{getLocalizedDescription(place, i18n.language)}</p>
+        )}
 
         <div className="grid grid-cols-1 gap-3 border-t border-neutral-200 py-6 sm:grid-cols-2">
           {place.phone && (
@@ -183,25 +191,25 @@ function PlaceDetailPage() {
               className="flex items-center gap-2 text-sm text-accent-600 hover:underline"
             >
               <Globe className="size-4" />
-              Visit website
+              {t('placeDetail.visitWebsite')}
               <ExternalLink className="size-3" />
             </a>
           )}
         </div>
 
         <section className="border-t border-neutral-200 py-8">
-          <h2 className="mb-4 text-xl font-semibold text-neutral-900">Reviews</h2>
+          <h2 className="mb-4 text-xl font-semibold text-neutral-900">{t('placeDetail.reviews')}</h2>
 
           {user && (
             <div className="mb-6 rounded-card border border-neutral-200 p-4">
               <p className="mb-2 text-sm font-medium text-neutral-700">
-                {myReview ? 'Update your review' : 'Write a review'}
+                {myReview ? t('placeDetail.updateReview') : t('placeDetail.writeReview')}
               </p>
               <StarRatingInput value={reviewRating} onChange={setReviewRating} />
               <textarea
                 value={reviewComment}
                 onChange={(event) => setReviewComment(event.target.value)}
-                placeholder="Share your experience…"
+                placeholder={t('placeDetail.reviewPlaceholder')}
                 rows={3}
                 className="mt-3 w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-primary-400"
               />
@@ -211,14 +219,14 @@ function PlaceDetailPage() {
                   disabled={isSubmittingReview}
                   className="rounded-pill bg-accent-500 px-5 py-2 text-sm font-medium text-white transition hover:bg-accent-600 disabled:opacity-60"
                 >
-                  {myReview ? 'Update Review' : 'Submit Review'}
+                  {myReview ? t('placeDetail.updateReviewButton') : t('placeDetail.submitReview')}
                 </button>
                 {myReview && (
                   <button
                     onClick={handleDeleteReview}
                     className="rounded-pill border border-neutral-200 px-5 py-2 text-sm font-medium text-neutral-700 hover:border-red-300 hover:text-red-600"
                   >
-                    Delete
+                    {t('placeDetail.deleteReview')}
                   </button>
                 )}
               </div>
@@ -226,7 +234,7 @@ function PlaceDetailPage() {
           )}
 
           {reviews.length === 0 ? (
-            <p className="text-neutral-500">No reviews yet. Be the first to share your experience.</p>
+            <p className="text-neutral-500">{t('placeDetail.noReviews')}</p>
           ) : (
             <ul className="flex flex-col gap-4">
               {reviews.map((review) => (
@@ -248,9 +256,8 @@ function PlaceDetailPage() {
         {nearby.length > 0 && (
           <section className="border-t border-neutral-200 py-8">
             <h2 className="mb-4 text-xl font-semibold text-neutral-900">
-              Nearby in{' '}
               <Link to={`/destinations/${place.destination}`} className="text-accent-600 hover:underline">
-                {place.destination_name}
+                {t('placeDetail.nearbyIn', { name: place.destination_name })}
               </Link>
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

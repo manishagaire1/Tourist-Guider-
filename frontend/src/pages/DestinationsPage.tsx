@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Search } from 'lucide-react'
 import DestinationCard from '@/components/DestinationCard'
 import DestinationCardSkeleton from '@/components/DestinationCardSkeleton'
@@ -6,6 +7,7 @@ import { fetchDestinations } from '@/services/destinationsService'
 import type { Destination } from '@/types'
 
 function DestinationsPage() {
+  const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [destinations, setDestinations] = useState<Destination[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -31,8 +33,8 @@ function DestinationsPage() {
   return (
     <main className="mx-auto max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-neutral-900">All Destinations</h1>
-        <p className="mt-1 text-neutral-500">Browse every destination on Tourist Guide.</p>
+        <h1 className="text-2xl font-semibold text-neutral-900">{t('destinationsPage.title')}</h1>
+        <p className="mt-1 text-neutral-500">{t('destinationsPage.subtitle')}</p>
       </div>
 
       <div className="mb-8 flex items-center gap-2 rounded-pill border border-neutral-200 bg-white px-4 py-2.5 shadow-card sm:max-w-md">
@@ -41,7 +43,7 @@ function DestinationsPage() {
           type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search by destination or country…"
+          placeholder={t('destinationsPage.searchPlaceholder')}
           className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
         />
       </div>
@@ -54,7 +56,7 @@ function DestinationsPage() {
 
       {!isLoading && destinations.length === 0 && (
         <div className="rounded-card border border-neutral-200 bg-white px-6 py-12 text-center text-neutral-500">
-          Sorry, we couldn't find any destinations matching your search.
+          {t('destinationsPage.noResults')}
         </div>
       )}
     </main>

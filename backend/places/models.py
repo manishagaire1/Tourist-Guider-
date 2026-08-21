@@ -8,6 +8,10 @@ class Category(models.Model):
     name = models.CharField(max_length=60, unique=True)
     slug = models.SlugField(max_length=70, unique=True, blank=True)
     icon = models.CharField(max_length=50, blank=True, help_text='Lucide icon name')
+    translations = models.JSONField(
+        default=dict, blank=True,
+        help_text='{"ja": {"name": ...}, "ne": {...}, "hi": {...}}',
+    )
 
     class Meta:
         verbose_name_plural = 'categories'
@@ -45,6 +49,10 @@ class Place(models.Model):
     image_source = models.CharField(max_length=100, blank=True, help_text='e.g. "Wikimedia Commons"')
     image_source_url = models.URLField(blank=True, help_text='Page the image was verified/sourced from')
     image_credit = models.CharField(max_length=255, blank=True, help_text='Photographer/author and license, e.g. "Jane Doe — CC BY-SA 4.0"')
+    translations = models.JSONField(
+        default=dict, blank=True,
+        help_text='{"ja": {"name": ..., "description": ...}, "ne": {...}, "hi": {...}}',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

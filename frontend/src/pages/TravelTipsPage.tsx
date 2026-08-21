@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   HandHeart,
   Languages,
@@ -28,11 +29,12 @@ const ICONS: Record<string, LucideIcon> = {
 }
 
 function TravelTipsPage() {
+  const { t } = useTranslation()
   return (
     <main className="mx-auto max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-neutral-900">Travel Tips</h1>
-        <p className="mt-1 text-neutral-500">Practical advice to travel safer, smarter, and more respectfully.</p>
+        <h1 className="text-2xl font-semibold text-neutral-900">{t('travelTips.title')}</h1>
+        <p className="mt-1 text-neutral-500">{t('travelTips.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -52,7 +54,7 @@ function TravelTipsPage() {
                 <h2 className="mt-1 text-lg font-semibold text-neutral-900">{tip.title}</h2>
               </div>
               <p className="text-sm text-neutral-600">{tip.summary}</p>
-              <span className="mt-auto text-sm font-medium text-accent-600 group-hover:underline">Read more</span>
+              <span className="mt-auto text-sm font-medium text-accent-600 group-hover:underline">{t('common.readMore')}</span>
             </Link>
           )
         })}
